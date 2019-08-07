@@ -44,7 +44,13 @@ class ExerciseServiceImpl(
     }
   }
 
-  override def deleteBankInfo(identifier: String): ServiceCall[NotUsed, BankInfo] = ???
+  override def deleteBankInfo(identifier: String): ServiceCall[NotUsed, String] =  ServiceCall { bi =>
+    bankInfoDao.deleteByIdentifier(identifier).map(x =>
+      s"Bank Info with identifier ${identifier} delete ${x} "
+      ).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
   override def createBackListIp: ServiceCall[BlackListIp, BlackListIp] = ???
 

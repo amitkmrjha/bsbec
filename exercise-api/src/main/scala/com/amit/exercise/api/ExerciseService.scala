@@ -20,7 +20,7 @@ trait ExerciseService extends Service {
 
 
   def createBankInfo:ServiceCall[BankInfo, BankInfo]
-  def deleteBankInfo(identifier:String): ServiceCall[NotUsed, BankInfo]
+  def deleteBankInfo(identifier:String): ServiceCall[NotUsed, String]
   def getBankInfoByIdentifier(identifier:String): ServiceCall[NotUsed, BankInfo]
 
   def createBackListIp:ServiceCall[BlackListIp, BlackListIp]

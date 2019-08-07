@@ -43,7 +43,7 @@ class BankInfoDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
     BankInfo(id(r), name(r), identifier(r))
   }
 
-  def deleteByTitle(identifier: String): Future[Done] = {
+  def deleteByIdentifier(identifier: String): Future[Done] = {
     session.executeWrite(BankInfoTable.deleteByIdentifier(identifier))
   }
 

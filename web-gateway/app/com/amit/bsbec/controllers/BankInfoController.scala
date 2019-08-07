@@ -42,4 +42,13 @@ class BankInfoController (
       })
   }
 
+  def deleteBankInfo(identifier:String): Action[AnyContent] = Action.async { implicit request =>
+    logger.info(Messages("action.request.info", request.id, request.method, request.uri))
+    exerciseService.deleteBankInfo(identifier).invoke.map{ x=>
+      Ok(Json.toJson(x))
+    }.recover{
+      case ex:Exception => InternalServerError(s"${ex.getLocalizedMessage}")
+    }
+  }
+
 }
