@@ -156,6 +156,16 @@ object KeyWordTitleTable extends EntityTable[KeyWordTitle] {
     Future.sequence(futureSeq)
   }
 
+  def deleteSeq(seqT:Seq[KeyWordTitle])
+            (implicit session: CassandraSession, ec: ExecutionContext):Future[Seq[BoundStatement]] ={
+    val futureSeq = seqT.map { t =>
+      val bindV = getDeleteBindValues(t)
+      bindPrepare(deletePromise,bindV)
+    }
+    Future.sequence(futureSeq)
+
+  }
+
 }
 
 

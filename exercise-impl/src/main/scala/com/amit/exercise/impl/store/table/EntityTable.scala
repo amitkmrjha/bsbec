@@ -56,9 +56,9 @@ trait EntityTable[T <: Entity] {
   }
 
   def delete(t:T)
-            (implicit session: CassandraSession, ec: ExecutionContext):Future[Option[BoundStatement]] ={
+            (implicit session: CassandraSession, ec: ExecutionContext):Future[BoundStatement] ={
     val bindV = getDeleteBindValues(t)
-    bindPrepare(deletePromise,bindV).map(x => Some(x))
+    bindPrepare(deletePromise,bindV)
   }
 
   def createTable()

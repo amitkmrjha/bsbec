@@ -61,11 +61,14 @@ class CategoryDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
   }
 
   def delete(title: String): Future[Done] = {
-    session.executeWrite(CategoryTable.deleteByTitle(title))
+    getByTitle(title).flatMap{
+      case Some(c) => deleteBaseAndView(c)
+      case None => throw new Exception(s"No category found for title ${title} ")
+    }
   }
 
   def create(category:Category): Future[Category] = {
-    baseAndView(category).map(_ => category)
+    insertBaseAndView(category).map(_ => category)
   }
 
   protected def createKeyWordTitle(category:Category):Future[Done] = {
@@ -86,12 +89,23 @@ class CategoryDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
     session.executeWriteBatch(batch)
   }
 
-  private def baseAndView(category:Category):Future[Done] = {
+  private def insertBaseAndView(category:Category):Future[Done] = {
     for{
       basePS <- CategoryTable.insert(category)(session,ec)
       baseInsert <- session.executeWrite(basePS)
       ktView <- KeyWordTitleTable.insertSeq( toCreateKeyWordTitle(category))(session,ec)
       ktViewInsert <- executeBatch(ktView)
+    }yield{
+      Done.getInstance()
+    }
+  }
+
+  private def deleteBaseAndView(category:Category):Future[Done] = {
+    for{
+      basePS <- CategoryTable.delete(category)(session,ec)
+      base <- session.executeWrite(basePS)
+      ktViewPS <- KeyWordTitleTable.deleteSeq( toCreateKeyWordTitle(category))(session,ec)
+      ktView <- executeBatch(ktViewPS)
     }yield{
       Done.getInstance()
     }
