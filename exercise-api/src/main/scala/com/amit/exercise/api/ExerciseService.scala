@@ -24,12 +24,12 @@ trait ExerciseService extends Service {
   def getBankInfoByIdentifier(identifier:String): ServiceCall[NotUsed, BankInfo]
 
   def createBackListIp:ServiceCall[BlackListIp, BlackListIp]
-  def deleteBackListIp(ip:Long): ServiceCall[NotUsed, BlackListIp]
+  def deleteBackListIp(ip:Long): ServiceCall[NotUsed, String]
   def isBlackListIp(ip:Long): ServiceCall[NotUsed, Boolean]
 
   def createCategory:ServiceCall[Category, Category]
-  def deleteCategory(title:String): ServiceCall[NotUsed, Category]
-  def getCategoryByTitle(ip:Long): ServiceCall[NotUsed, Category]
+  def deleteCategory(title:String): ServiceCall[NotUsed, String]
+  def getCategoryByTitle(title:String): ServiceCall[NotUsed, Category]
 
 
   //

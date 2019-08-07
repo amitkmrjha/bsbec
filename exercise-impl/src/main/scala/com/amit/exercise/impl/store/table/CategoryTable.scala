@@ -1,9 +1,11 @@
 package com.amit.exercise.impl.table
 
+import java.time.LocalDateTime
 import java.util
 
 import com.amit.exercise.Category
 import com.amit.exercise.impl.store.store.{ColumnFamilies, Columns}
+import com.amit.exercise.util.LocalDateTimeConverters._
 import com.datastax.driver.core.querybuilder.{Delete, Insert, QueryBuilder}
 
 import scala.collection.JavaConverters._
@@ -48,10 +50,10 @@ object CategoryTable extends EntityTable[Category] {
   override protected def getInsertBindValues(entity: Category): Seq[AnyRef] = {
     val bindValues: Seq[AnyRef] = fields.map(x => x match {
       case Columns.Id => entity.id.getOrElse(UUIDs.timeBased())
-      case Columns.Type => entity.`type`
+      case Columns.Type => entity.`type`.getOrElse("category")
       case Columns.Title => entity.title
-      case Columns.KeyWords => entity.keywords.asJava
-      case Columns.CreationDate => entity.creation_date
+      case Columns.KeyWords => entity.keywords.map(x => x.toString).toSet.asJava
+      case Columns.CreationDate => entity.creation_date.getOrElse(LocalDateTime.now()).toDate
     })
     bindValues
   }

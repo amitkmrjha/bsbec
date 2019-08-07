@@ -3,7 +3,7 @@ package com.amit.exercise.impl
 
 import akka.NotUsed
 import akka.stream.scaladsl.Source
-import com.amit.exercise.{BankInfo, BlackListIp, Category}
+import com.amit.exercise.{BankInfo, BlackListIp, Category, Contract}
 import com.amit.exercise.api.ExerciseService
 import com.amit.exercise.impl.store.daos.{BankInfoDao, BlackListIpDao, CategoryDao}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
@@ -11,21 +11,23 @@ import com.lightbend.lagom.scaladsl.api.transport.NotFound
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import play.api.i18n.{Lang, Langs, MessagesApi}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 /**
   * Implementation of the BsbecService.
   */
 class ExerciseServiceImpl(
                            bankInfoDao: BankInfoDao,
                            blackListIpDao: BlackListIpDao,
-                           fileCategoryDao: CategoryDao,
+                           categoryDao: CategoryDao,
                            messagesApi: MessagesApi,
                            languages: Langs)
 (implicit ec: ExecutionContext) extends ExerciseService {
 
 
 
-  override def processContract(typeKey: String): ServiceCall[NotUsed, String] = ???
+  override def processContract(typeKey: String): ServiceCall[NotUsed, String] = ServiceCall { _ =>
+    Future.successful(Contract.processContract(typeKey))
+  }
 
   override def urlDynamicPart: ServiceCall[Seq[String], Seq[String]] = ???
 
@@ -52,15 +54,46 @@ class ExerciseServiceImpl(
     }
   }
 
-  override def createBackListIp: ServiceCall[BlackListIp, BlackListIp] = ???
+  override def createBackListIp: ServiceCall[BlackListIp, BlackListIp] = ServiceCall { bli =>
+    blackListIpDao.create(bli).map(x=>x).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
-  override def deleteBackListIp(ip: Long): ServiceCall[NotUsed, BlackListIp] = ???
+  override def deleteBackListIp(ip: Long): ServiceCall[NotUsed, String] = ServiceCall { _ =>
+    blackListIpDao.delete(ip).map(x =>
+    s"Black list ip ${ip} delete ${x} "
+  ).recover {
+    case ex: Exception => throw ex
+  }
+  }
 
-  override def isBlackListIp(ip: Long): ServiceCall[NotUsed, Boolean] = ???
+  override def isBlackListIp(ip: Long): ServiceCall[NotUsed, Boolean] = ServiceCall { _ =>
+    blackListIpDao.isBlackList(ip).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
-  override def createCategory: ServiceCall[Category, Category] = ???
+  override def createCategory: ServiceCall[Category, Category] = ServiceCall { c =>
+    categoryDao.create(c).map(x=>x).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
-  override def deleteCategory(title: String): ServiceCall[NotUsed, Category] = ???
+  override def deleteCategory(title: String): ServiceCall[NotUsed, String] = ServiceCall { _ =>
+    categoryDao.delete(title).map(x =>
+      s"category with title ${title} delete ${x} "
+    ).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
-  override def getCategoryByTitle(ip: Long): ServiceCall[NotUsed, Category] = ???
+  override def getCategoryByTitle(title: String): ServiceCall[NotUsed, Category] = ServiceCall { _ =>
+    categoryDao.getByTitle(title).map {
+      case Some(bi) => bi
+      case None => throw NotFound(s"No Category found with title ${title}")
+    }recover {
+      case ex: Exception => throw ex
+    }
+  }
 }
