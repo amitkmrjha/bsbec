@@ -1,0 +1,6338 @@
+{
+  "openapi" : "3.0.2",
+  "info" : {
+    "title" : "Syndeia Cloud REST API",
+    "description" : "This is the REST API documentation for Syndeia Cloud 3.3",
+    "version" : "3.3"
+  },
+  "externalDocs" : {
+    "description" : "Learn more about Syndeia",
+    "url" : "http://www.intercax.com/syndeia"
+  },
+  "tags" : [
+    {
+      "name" : "Auth",
+      "description" : "Manage authentication",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "User",
+      "description" : "Manage users",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Repository",
+      "description" : "Manage repositories",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Container",
+      "description" : "Manage containers",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Artifact",
+      "description" : "Manage artifacts",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Relation",
+      "description" : "Manage relations",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Graph",
+      "description" : "Manage graph",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Repository Type",
+      "description" : "Manage repository type",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Container Type",
+      "description" : "Manage container type",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Artifact Type",
+      "description" : "Manage artifact type",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    },
+    {
+      "name" : "Relation Type",
+      "description" : "Manage relation type",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "http://www.intercax.com/syndeia/docs"
+      }
+    }
+  ],
+  "paths" : {
+    "/signUp" : {
+      "post" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Create a new user (sign-up)",
+        "description" : "Create a new unique user identified by username",
+        "operationId" : "createUser",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserSignUpBody"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "SignUp",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignUpCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/signIn" : {
+      "post" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Sign-in a user",
+        "description" : "Sign-in to the system",
+        "operationId" : "getToken",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserSignInBody"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "SignIn",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignInCreatedMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authenticate/{provider}" : {
+      "post" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Authenticate user through Auth Provider e.g LDAP",
+        "description" : "Sign-in to the system using Auth provider credential.",
+        "operationId" : "getTokenByProvider",
+        "parameters" : [
+          {
+            "name" : "provider",
+            "in" : "path",
+            "description" : "Provider identifier",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "LDAP"
+              ]
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/SignInProviderBody"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "SignIn",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignInCreatedMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signOut" : {
+      "get" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Sign-out a user",
+        "description" : "Sign-out of the system",
+        "operationId" : "signOutUser",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/password/change" : {
+      "post" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Change user password",
+        "description" : "Change user password. Request must be sent by the user.",
+        "operationId" : "updatePassword",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ChangePasswordBody"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/password/reset" : {
+      "post" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Reset user password",
+        "description" : "Reset user password. Request must be sent by an admin who has user modification permissions.",
+        "operationId" : "getNewPassword",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ResetPasswordBody"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/signUp/superuser" : {
+      "get" : {
+        "tags" : [
+          "Auth"
+        ],
+        "summary" : "Sign-up super user",
+        "description" : "Sign-up super user",
+        "operationId" : "createSuperUser",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repositories" : {
+      "get" : {
+        "tags" : [
+          "Repository"
+        ],
+        "summary" : "Get all repositories",
+        "description" : "Get the details of all the repositories",
+        "operationId" : "getRepositories",
+        "parameters" : [
+          {
+            "name" : "uri",
+            "in" : "query",
+            "description" : "uri",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "type.key",
+            "in" : "query",
+            "description" : "repository type key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the repository",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the repository",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Repositories",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositorySeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Repository"
+        ],
+        "summary" : "Create a new repository",
+        "description" : "Create a new repository with the given details.",
+        "operationId" : "createRepository",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RepositoryCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Repository",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/repositories/{key}" : {
+      "get" : {
+        "tags" : [
+          "Repository"
+        ],
+        "summary" : "Get a repository given the repository key",
+        "description" : "Get the details of a repository with the given key",
+        "operationId" : "getRepositoryByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Repository",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Repository"
+        ],
+        "summary" : "Update a repository given the repository key",
+        "description" : "Update an existing repository with the given details",
+        "operationId" : "updateRepositoryByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RepositoryUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Repository",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Repository"
+        ],
+        "summary" : "Delete a repository given the repository key",
+        "description" : "Delete a repository with the given key",
+        "operationId" : "deleteRepositoryByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Repository",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/repositories/externalId/{extId}" : {
+      "get" : {
+        "tags" : [
+          "Repository"
+        ],
+        "summary" : "Get a repository given the repository external id",
+        "description" : "Get the details of a repository with the given external id",
+        "operationId" : "getRepositoryByExternalId",
+        "parameters" : [
+          {
+            "name" : "extId",
+            "in" : "path",
+            "description" : "external id that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Repository",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/containers" : {
+      "get" : {
+        "tags" : [
+          "Container"
+        ],
+        "summary" : "Get all containers",
+        "description" : "Get a list of all the containers",
+        "operationId" : "getContainers",
+        "parameters" : [
+          {
+            "name" : "repository.key",
+            "in" : "query",
+            "description" : "owner repository key of the container",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "type.key",
+            "in" : "query",
+            "description" : "container type key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the container",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the container",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "isInternal",
+            "in" : "query",
+            "description" : "auth Context",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Containers",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Container"
+        ],
+        "summary" : "Create a new container",
+        "description" : "Create a new container with the given details",
+        "operationId" : "createContainer",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ContainerCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Container",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/containers/{key}" : {
+      "get" : {
+        "tags" : [
+          "Container"
+        ],
+        "summary" : "Get a container given the container key",
+        "description" : "Get the details of a container with the given key",
+        "operationId" : "getContainerByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Container",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Container"
+        ],
+        "summary" : "Update a container given the container key",
+        "description" : "Update an existing container with the given details",
+        "operationId" : "updateContainerByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ContainerUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Container",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Container"
+        ],
+        "summary" : "Delete a container given the container key",
+        "description" : "Delete a container with given container key",
+        "operationId" : "deleteContainerByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Container",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/responses/ContainerObjResponse"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/containers/externalId/{extId}" : {
+      "get" : {
+        "tags" : [
+          "Container"
+        ],
+        "summary" : "Get a container given the container external id",
+        "description" : "Get the details of a container with the given container external id",
+        "operationId" : "getContainerByExternalId",
+        "parameters" : [
+          {
+            "name" : "extId",
+            "in" : "path",
+            "description" : "external id that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Container",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/responses/ContainerObjResponse"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/artifacts" : {
+      "get" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Get all artifacts",
+        "description" : "Get a list of all the artifacts",
+        "operationId" : "getArtifacts",
+        "parameters" : [
+          {
+            "name" : "container.key",
+            "in" : "query",
+            "description" : "key of the owning container",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "type.key",
+            "in" : "query",
+            "description" : "artifact type key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the artifact",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the artifact",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "version",
+            "in" : "query",
+            "description" : "version",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Artifacts",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Create a new artifact",
+        "description" : "Create a new artifact with the given details.",
+        "operationId" : "createArtifact",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ArtifactCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Artifact",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/artifacts/{key}" : {
+      "get" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Get an artifact given the artifact key",
+        "description" : "Get the details of the latest version of the artifact with the given key",
+        "operationId" : "getArtifactByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Artifact",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Update artifact given the artifact key",
+        "description" : "Update the artifact (with given key) with the given details.",
+        "operationId" : "updateArtifactByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ArtifactUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Artifact",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Delete an artifact given the artifact key",
+        "description" : "Delete an artifact with the given artifact key. This will delete all versions of the artifact.",
+        "operationId" : "deleteArtifactsByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Artifacts",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/artifacts/{key}/versions" : {
+      "get" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Get all versions of an artifact given the artifact key",
+        "description" : "Get a list of all versions of the artifact with the given key",
+        "operationId" : "getArtifactVersionsByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Artifacts",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/artifacts/{key}/versions/{version}" : {
+      "get" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Get specific versions of an artifact given the artifact key and version",
+        "description" : "Get  versions of the artifact with the given key and version.",
+        "operationId" : "getArtifactByKeyAndVersion",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "version",
+            "in" : "path",
+            "description" : "version that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Artifact",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/artifacts/externalId/{extId}" : {
+      "get" : {
+        "tags" : [
+          "Artifact"
+        ],
+        "summary" : "Get an artifact given the artifact external id",
+        "description" : "Get the details of an artifact with the given external id",
+        "operationId" : "getArtifactByExternalId",
+        "parameters" : [
+          {
+            "name" : "extId",
+            "in" : "path",
+            "description" : "external id that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Artifact",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/relations" : {
+      "get" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Get all relations",
+        "description" : "Get a list of all the relations",
+        "operationId" : "getRelations",
+        "parameters" : [
+          {
+            "name" : "container.key",
+            "in" : "query",
+            "description" : "key of the owning container",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "source.key",
+            "in" : "query",
+            "description" : "source artifact key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "source.version",
+            "in" : "query",
+            "description" : "source artifact version",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "target.key",
+            "in" : "query",
+            "description" : "target artifact key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "target.version",
+            "in" : "query",
+            "description" : "target artifact version",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the relation",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the relation",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "version",
+            "in" : "query",
+            "description" : "version",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "type.key",
+            "in" : "query",
+            "description" : "relation type key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Relations",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Create a new relation",
+        "operationId" : "createRelation",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RelationCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Relation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/relations/{key}" : {
+      "get" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Get a relation given the relation key",
+        "description" : "Get the details of the latest version of the relation with the given key",
+        "operationId" : "getRelationByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Relation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Update relation given the relation key",
+        "description" : "Update relation (with given key) with the given details",
+        "operationId" : "updateRelationByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RelationUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Relation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Delete a relation given the relation key",
+        "description" : "Delete a relation given the relation key. This will delete all versions of the relation.",
+        "operationId" : "deleteRelationsByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Relations",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/relations/{key}/versions" : {
+      "get" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Get all versions of a relation given the relation key",
+        "description" : "Get a list of all versions of the relation with the given key",
+        "operationId" : "getRelationVersionsByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Relations",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/relations/{key}/versions/{version}" : {
+      "get" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Get specific version of a relation given the relation key and version",
+        "description" : "Get specific version of a relation given the relation key and version.",
+        "operationId" : "getRelationByKeyAndVersion",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "version",
+            "in" : "path",
+            "description" : "version that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Relation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/relations/externalId/{extId}" : {
+      "get" : {
+        "tags" : [
+          "Relation"
+        ],
+        "summary" : "Get a relation given the relation external id",
+        "description" : "Get the details of a relation with the given external id",
+        "operationId" : "getRelationByExternalId",
+        "parameters" : [
+          {
+            "name" : "extId",
+            "in" : "path",
+            "description" : "external id that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Relation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/repository" : {
+      "get" : {
+        "tags" : [
+          "Repository Type"
+        ],
+        "summary" : "Get all repositories type",
+        "description" : "Get the details of all the repositories type",
+        "operationId" : "getRepositoryTypes",
+        "parameters" : [
+          {
+            "name" : "isInternal",
+            "in" : "query",
+            "description" : "auth Context",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Repository Types",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryTypeSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Repository Type"
+        ],
+        "summary" : "Create a new repository type",
+        "description" : "Create a new repository type with the given details.",
+        "operationId" : "createRepositoryType",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RepositoryTypeCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Repository Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/repository/{key}" : {
+      "get" : {
+        "tags" : [
+          "Repository Type"
+        ],
+        "summary" : "Get a repository type given the repository type key",
+        "description" : "Get the details of a repository type with the given key",
+        "operationId" : "getRepositoryTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Repository Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryTypeObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Repository Type"
+        ],
+        "summary" : "Update a repository type given the repository key",
+        "description" : "Update an existing repository type with the given details",
+        "operationId" : "updateRepositoryTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RepositoryTypeUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Repository Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Repository Type"
+        ],
+        "summary" : "Delete a repository type given the repository type key",
+        "description" : "Delete a repository type with the given key",
+        "operationId" : "deleteRepositoryTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Repository",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/repository/{key}/attribdefs/{id}" : {
+      "get" : {
+        "tags" : [
+          "Repository Type"
+        ],
+        "summary" : "Get a attribute defination of repository type given the repository type key and attribute defination id",
+        "description" : "Get the details of attribute definition of repository type given the repository type key and attribute definition id",
+        "operationId" : "getRepositoryTypeByKeyAndAttributeDefinitionId",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "attribute definition id",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Repository Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RepositoryObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/container" : {
+      "get" : {
+        "tags" : [
+          "Container Type"
+        ],
+        "summary" : "Get all containers type",
+        "description" : "Get the details of all the containers type",
+        "operationId" : "getContainerTypes",
+        "parameters" : [
+          {
+            "name" : "repository.key",
+            "in" : "query",
+            "description" : "key of the owning repository",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the container type",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the container type",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Container Types",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerTypeSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Container Type"
+        ],
+        "summary" : "Create a new Container type",
+        "description" : "Create a new Container type with the given details.",
+        "operationId" : "createContainerType",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ContainerTypeCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Container Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/container/{key}" : {
+      "get" : {
+        "tags" : [
+          "Container Type"
+        ],
+        "summary" : "Get a Container type given the Container type key",
+        "description" : "Get the details of a Container type with the given key",
+        "operationId" : "getContainerTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Container Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerTypeObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Container Type"
+        ],
+        "summary" : "Update a Container type given the Container key",
+        "description" : "Update an existing Container type with the given details",
+        "operationId" : "updateContainerTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ContainerTypeUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Container Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Container Type"
+        ],
+        "summary" : "Delete a Container type given the container type key",
+        "description" : "Delete a Container type with the given key",
+        "operationId" : "deleteContainerTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Container Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/container/{key}/attribdefs/{id}" : {
+      "get" : {
+        "tags" : [
+          "Container Type"
+        ],
+        "summary" : "Get a attribute defination of container type given the container type key and attribute definition id",
+        "description" : "Get the details of attribute definition of container type given the container type key and attribute definition id",
+        "operationId" : "getContainerTypeByKeyAndAttributeDefinitionId",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "attribute definition id",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Container Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContainerObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/artifact" : {
+      "get" : {
+        "tags" : [
+          "Artifact Type"
+        ],
+        "summary" : "Get all artifact types",
+        "description" : "Get the details of all the artifact types",
+        "operationId" : "getArtifactTypes",
+        "parameters" : [
+          {
+            "name" : "repository.key",
+            "in" : "query",
+            "description" : "key of the owning repository",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "container.key",
+            "in" : "query",
+            "description" : "key of the owning container key",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the artifact type",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the artifact type",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Artifact Types",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactTypeSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Artifact Type"
+        ],
+        "summary" : "Create a new Artifact type",
+        "description" : "Create a new Artifact type with the given details.",
+        "operationId" : "createArtifactType",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ArtifactTypeCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Artifact Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/artifact/{key}" : {
+      "get" : {
+        "tags" : [
+          "Artifact Type"
+        ],
+        "summary" : "Get a Artifact type given the Artifact type key",
+        "description" : "Get the details of a Artifact type with the given key",
+        "operationId" : "getArtifactTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Artifact Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactTypeObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Artifact Type"
+        ],
+        "summary" : "Update a Artifact type given the Artifact key",
+        "description" : "Update an existing Artifact type with the given details",
+        "operationId" : "updateArtifactTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ArtifactTypeUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Artifact Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Artifact Type"
+        ],
+        "summary" : "Delete a Artifact type given the Artifact type key",
+        "description" : "Delete a Artifact type with the given key",
+        "operationId" : "deleteArtifactTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Artifact Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/artifact/{key}/attribdefs/{id}" : {
+      "get" : {
+        "tags" : [
+          "Artifact Type"
+        ],
+        "summary" : "Get an attribute definition of an artifact type given the artifact type key and attribute definition id",
+        "description" : "Get the details of attribute definition of an artifact type given the artifact type key and attribute definition id",
+        "operationId" : "getArtifactTypeByKeyAndAttributeDefinitionId",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "attribute definition id",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Artifact Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/relation" : {
+      "get" : {
+        "tags" : [
+          "Relation Type"
+        ],
+        "summary" : "Get all relations type",
+        "description" : "Get the details of all the relations type",
+        "operationId" : "getRelationTypes",
+        "parameters" : [
+          {
+            "name" : "repository.key",
+            "in" : "query",
+            "description" : "key of the owning repository",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "container.key",
+            "in" : "query",
+            "description" : "key of the owning container",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the relation type",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the relation type",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Relation Types",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationTypeSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "post" : {
+        "tags" : [
+          "Relation Type"
+        ],
+        "summary" : "Create a new Relation type",
+        "description" : "Create a new Relation type with the given details.",
+        "operationId" : "createRelationType",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RelationTypeCreateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Relation Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/relation/{key}" : {
+      "get" : {
+        "tags" : [
+          "Relation Type"
+        ],
+        "summary" : "Get a Relation type given the Relation type key",
+        "description" : "Get the details of a Relation type with the given key",
+        "operationId" : "getRelationTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Relation Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationTypeObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "Relation Type"
+        ],
+        "summary" : "Update a Relation type given the Relation key",
+        "description" : "Update an existing Relation type with the given details",
+        "operationId" : "updateRelationTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/RelationTypeUpdateBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Relation Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationTypeCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "Relation Type"
+        ],
+        "summary" : "Delete a Relation type given the Relation type key",
+        "description" : "Delete a Relation type with the given key",
+        "operationId" : "deleteRelationTypeByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Relation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/types/relation/{key}/attribdefs/{id}" : {
+      "get" : {
+        "tags" : [
+          "Relation Type"
+        ],
+        "summary" : "Get an attribute definition of relation type given the relation type key and attribute definition id",
+        "description" : "Get the details of attribute definition of relation type given the relation type key and attribute definition id",
+        "operationId" : "getRelationTypeByKeyAndAttributeDefinitionId",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "attribute definition id",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Relation Type",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RelationObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [
+          "User"
+        ],
+        "summary" : "Get all users",
+        "description" : "Get a list of all the users",
+        "operationId" : "getUsers",
+        "parameters" : [
+          {
+            "name" : "userName",
+            "in" : "query",
+            "description" : "group name",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.key",
+            "in" : "query",
+            "description" : "external key of the user",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "name" : "external.id",
+            "in" : "query",
+            "description" : "external id of the user",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "List of Users",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserSeqMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/users/{key}" : {
+      "get" : {
+        "tags" : [
+          "User"
+        ],
+        "summary" : "Get a user given the user key",
+        "description" : "Get the details of a user given the user key",
+        "operationId" : "getUserByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "User",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "put" : {
+        "tags" : [
+          "User"
+        ],
+        "summary" : "Update a user given the user key",
+        "description" : "Update an existing user with the given details",
+        "operationId" : "updateUserByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserUpdateBody"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "User",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserCreatedMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      },
+      "delete" : {
+        "tags" : [
+          "User"
+        ],
+        "summary" : "Delete a user given the user key",
+        "description" : "Delete a user given the user key",
+        "operationId" : "deleteUserByKey",
+        "parameters" : [
+          {
+            "name" : "key",
+            "in" : "path",
+            "description" : "key that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "User",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/users/externalId/{extId}" : {
+      "get" : {
+        "tags" : [
+          "User"
+        ],
+        "summary" : "Get a user given the user external id",
+        "description" : "Get the details of a user given the user external id",
+        "operationId" : "getUserByExternalId",
+        "parameters" : [
+          {
+            "name" : "extId",
+            "in" : "path",
+            "description" : "external id that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "User",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/users/username/{username}" : {
+      "get" : {
+        "tags" : [
+          "User"
+        ],
+        "summary" : "Get a user given the user name",
+        "description" : "Get the details of a user given the user name",
+        "operationId" : "getUserByUsername",
+        "parameters" : [
+          {
+            "name" : "username",
+            "in" : "path",
+            "description" : "user name that needs to be considered for filter",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "User",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserObjMessage"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/graph/query" : {
+      "post" : {
+        "tags" : [
+          "Graph"
+        ],
+        "summary" : "Get result of a graph query",
+        "description" : "Get result of a graph query in syndeia format.",
+        "operationId" : "getGraphResult",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GraphQueryBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Graph",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Graph"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    },
+    "/graph/query/raw" : {
+      "post" : {
+        "tags" : [
+          "Graph"
+        ],
+        "summary" : "Get result of a graph query",
+        "description" : "Get result of a graph query in graph format.",
+        "operationId" : "getGraphResult",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GraphQueryBody"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Graph",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RawGraph"
+                }
+              }
+            }
+          }
+        },
+        "security" : [
+          {
+            "UserSecurity" : []
+          }
+        ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Repository" : {
+        "title" : "Repository",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/RepositoryTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryTypeReference"
+            }
+          }
+        }
+      },
+      "RepositoryCreate" : {
+        "title" : "RepositoryCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/RepositoryTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryTypeReference"
+            }
+          }
+        }
+      },
+      "RepositoryUpdate" : {
+        "title" : "RepositoryCreate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/RepositoryTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryTypeReference"
+            }
+          }
+        }
+      },
+      "Container" : {
+        "title" : "Container",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ContainerTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ContainerTypeReference"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          }
+        }
+      },
+      "ContainerCreate" : {
+        "title" : "ContainerCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ContainerTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ContainerTypeReference"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          }
+        }
+      },
+      "ContainerUpdate" : {
+        "title" : "ContainerCreate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ContainerTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ContainerTypeReference"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          }
+        }
+      },
+      "Artifact" : {
+        "title" : "Artifact",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "version" : {
+            "$ref" : "#/components/schemas/Version"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ArtifactTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArtifactTypeReference"
+            }
+          },
+          "container" : {
+            "$ref" : "#/components/schemas/ContainerReference"
+          }
+        }
+      },
+      "ArtifactCreate" : {
+        "title" : "ArtifactCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "version" : {
+            "$ref" : "#/components/schemas/Version"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ArtifactTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArtifactTypeReference"
+            }
+          },
+          "container" : {
+            "$ref" : "#/components/schemas/ContainerReference"
+          }
+        }
+      },
+      "ArtifactUpdate" : {
+        "title" : "ArtifactCreate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "version" : {
+            "$ref" : "#/components/schemas/Version"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ArtifactTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArtifactTypeReference"
+            }
+          },
+          "container" : {
+            "$ref" : "#/components/schemas/ContainerReference"
+          }
+        }
+      },
+      "Relation" : {
+        "title" : "Relation",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "version" : {
+            "$ref" : "#/components/schemas/Version"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "isInterModel" : {
+            "$ref" : "#/components/schemas/IsInterModel"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/RelationTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RelationTypeReference"
+            }
+          },
+          "container" : {
+            "$ref" : "#/components/schemas/ContainerReference"
+          },
+          "sourceArtifact" : {
+            "$ref" : "#/components/schemas/ArtifactReference"
+          },
+          "targetArtifact" : {
+            "$ref" : "#/components/schemas/ArtifactReference"
+          }
+        }
+      },
+      "RelationCreate" : {
+        "title" : "RelationCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "version" : {
+            "$ref" : "#/components/schemas/Version"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "isInterModel" : {
+            "$ref" : "#/components/schemas/IsInterModel"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/RelationTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RelationTypeReference"
+            }
+          },
+          "container" : {
+            "$ref" : "#/components/schemas/ContainerReference"
+          },
+          "sourceArtifact" : {
+            "$ref" : "#/components/schemas/ArtifactReference"
+          },
+          "targetArtifact" : {
+            "$ref" : "#/components/schemas/ArtifactReference"
+          }
+        }
+      },
+      "RelationUpdate" : {
+        "title" : "RelationCreate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "version" : {
+            "$ref" : "#/components/schemas/Version"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "isInterModel" : {
+            "$ref" : "#/components/schemas/IsInterModel"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/RelationTypeReference"
+          },
+          "attributes" : {
+            "$ref" : "#/components/schemas/Attributes"
+          },
+          "customTypes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RelationTypeReference"
+            }
+          },
+          "container" : {
+            "$ref" : "#/components/schemas/ContainerReference"
+          },
+          "sourceArtifact" : {
+            "$ref" : "#/components/schemas/ArtifactReference"
+          },
+          "targetArtifact" : {
+            "$ref" : "#/components/schemas/ArtifactReference"
+          }
+        }
+      },
+      "RepositoryType" : {
+        "title" : "RepositoryType",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          }
+        }
+      },
+      "RepositoryTypeCreate" : {
+        "title" : "RepositoryTypeCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          }
+        }
+      },
+      "RepositoryTypeUpdate" : {
+        "title" : "RepositoryTypeUpdate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          }
+        }
+      },
+      "ContainerType" : {
+        "title" : "ContainerType",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          }
+        }
+      },
+      "ContainerTypeCreate" : {
+        "title" : "ContainerTypeCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          }
+        }
+      },
+      "ContainerTypeUpdate" : {
+        "title" : "ContainerTypeUpdate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          }
+        }
+      },
+      "ArtifactType" : {
+        "title" : "ArtifactType",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryReference"
+            }
+          }
+        }
+      },
+      "ArtifactTypeCreate" : {
+        "title" : "ArtifactTypeCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryReference"
+            }
+          }
+        }
+      },
+      "ArtifactTypeUpdate" : {
+        "title" : "ArtifactTypeUpdate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryReference"
+            }
+          }
+        }
+      },
+      "RelationType" : {
+        "title" : "RelationType",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryReference"
+            }
+          }
+        }
+      },
+      "RelationTypeCreate" : {
+        "title" : "RelationTypeCreate",
+        "required" : [
+          "name",
+          "type"
+        ],
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryReference"
+            }
+          }
+        }
+      },
+      "RelationTypeUpdate" : {
+        "title" : "RelationTypeUpdate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "attributeDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeDefinition"
+            }
+          },
+          "repository" : {
+            "$ref" : "#/components/schemas/RepositoryReference"
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryReference"
+            }
+          }
+        }
+      },
+      "Graph" : {
+        "title" : "Graph",
+        "type" : "object",
+        "properties" : {
+          "artifacts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Artifact"
+            }
+          },
+          "containers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Container"
+            }
+          },
+          "repositories" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Repository"
+            }
+          },
+          "relations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Relation"
+            }
+          },
+          "types" : {
+            "$ref" : "#/components/schemas/Types"
+          },
+          "ownerEdges" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RawEdge"
+            }
+          },
+          "typeEdges" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RawEdge"
+            }
+          }
+        }
+      },
+      "RawGraph" : {
+        "title" : "RawGraph",
+        "type" : "object",
+        "properties" : {
+          "vertices" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RawVertex"
+            }
+          },
+          "edges" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RawEdge"
+            }
+          },
+          "otherResult" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GraphStringResult"
+            }
+          }
+        }
+      },
+      "RawVertex" : {
+        "title" : "RawVertex",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/Idstring"
+          },
+          "label" : {
+            "$ref" : "#/components/schemas/Label"
+          },
+          "properties" : {
+            "$ref" : "#/components/schemas/Properties"
+          }
+        }
+      },
+      "RawEdge" : {
+        "title" : "RawEdge",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/Idstring"
+          },
+          "label" : {
+            "$ref" : "#/components/schemas/Label"
+          },
+          "properties" : {
+            "$ref" : "#/components/schemas/Properties"
+          },
+          "sourceVertex" : {
+            "$ref" : "#/components/schemas/RawVertex"
+          },
+          "targetVertex" : {
+            "$ref" : "#/components/schemas/RawVertex"
+          }
+        }
+      },
+      "Types" : {
+        "title" : "Graph",
+        "type" : "object",
+        "properties" : {
+          "repositoryType" : {
+            "$ref" : "#/components/schemas/RepositoryType"
+          },
+          "containerType" : {
+            "$ref" : "#/components/schemas/ContainerType"
+          },
+          "artifactType" : {
+            "$ref" : "#/components/schemas/ArtifactType"
+          },
+          "relationType" : {
+            "$ref" : "#/components/schemas/RelationType"
+          }
+        }
+      },
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "profiles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Profile"
+            }
+          },
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "avatarURL" : {
+            "$ref" : "#/components/schemas/AvatarURL"
+          },
+          "activated" : {
+            "$ref" : "#/components/schemas/Activated"
+          }
+        }
+      },
+      "UserCreate" : {
+        "title" : "UserCreate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "profiles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Profile"
+            }
+          },
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "avatarURL" : {
+            "$ref" : "#/components/schemas/AvatarURL"
+          },
+          "activated" : {
+            "$ref" : "#/components/schemas/Activated"
+          }
+        }
+      },
+      "UserUpdate" : {
+        "title" : "UserUpdate",
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "$ref" : "#/components/schemas/Ids"
+          },
+          "keys" : {
+            "$ref" : "#/components/schemas/Keys"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/Description"
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/CreatedBy"
+          },
+          "createdDate" : {
+            "$ref" : "#/components/schemas/CreatedDate"
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/ModifiedBy"
+          },
+          "modifiedDate" : {
+            "$ref" : "#/components/schemas/ModifiedDate"
+          },
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/OtherInfo"
+          },
+          "profiles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Profile"
+            }
+          },
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "avatarURL" : {
+            "$ref" : "#/components/schemas/AvatarURL"
+          },
+          "activated" : {
+            "$ref" : "#/components/schemas/Activated"
+          }
+        }
+      },
+      "UserReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "RepositoryReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "ContainerReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "ArtifactReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "RelationReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "RepositoryTypeReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "ContainerTypeReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "ArtifactTypeReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "RelationTypeReference" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          }
+        }
+      },
+      "UserSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/User"
+          }
+        }
+      },
+      "UserCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/User"
+          }
+        }
+      },
+      "RepositorySeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Repository"
+            }
+          }
+        }
+      },
+      "RepositoryObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Repository"
+          }
+        }
+      },
+      "RepositoryCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Repository"
+          }
+        }
+      },
+      "ArtifactSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Artifact"
+            }
+          }
+        }
+      },
+      "ArtifactObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Artifact"
+          }
+        }
+      },
+      "ArtifactCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Artifact"
+          }
+        }
+      },
+      "ContainerSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Container"
+            }
+          }
+        }
+      },
+      "ContainerObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Container"
+          }
+        }
+      },
+      "ContainerCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Container"
+          }
+        }
+      },
+      "RelationSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Relation"
+            }
+          }
+        }
+      },
+      "RelationObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Relation"
+          }
+        }
+      },
+      "RelationCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/Relation"
+          }
+        }
+      },
+      "RepositoryTypeSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RepositoryType"
+            }
+          }
+        }
+      },
+      "RepositoryTypeObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/RepositoryType"
+          }
+        }
+      },
+      "RepositoryTypeCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/RepositoryType"
+          }
+        }
+      },
+      "ContainerTypeSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ContainerType"
+            }
+          }
+        }
+      },
+      "ContainerTypeObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/ContainerType"
+          }
+        }
+      },
+      "ContainerTypeCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/ContainerType"
+          }
+        }
+      },
+      "SignInCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/SignedInUser"
+          }
+        }
+      },
+      "ArtifactTypeSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArtifactType"
+            }
+          }
+        }
+      },
+      "ArtifactTypeObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/ArtifactType"
+          }
+        }
+      },
+      "ArtifactTypeCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/ArtifactType"
+          }
+        }
+      },
+      "SignUpCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/SignedUpUser"
+          }
+        }
+      },
+      "RelationTypeSeqMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "pageInfo" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RelationType"
+            }
+          }
+        }
+      },
+      "RelationTypeObjMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/RelationType"
+          }
+        }
+      },
+      "RelationTypeCreatedMessage" : {
+        "type" : "object",
+        "properties" : {
+          "statusCode" : {
+            "$ref" : "#/components/schemas/StatusCode"
+          },
+          "headers" : {
+            "$ref" : "#/components/schemas/Headers"
+          },
+          "uri" : {
+            "$ref" : "#/components/schemas/Uri"
+          },
+          "resources" : {
+            "$ref" : "#/components/schemas/RelationType"
+          }
+        }
+      },
+      "UserSignUp" : {
+        "required" : [
+          "firstName",
+          "lastName",
+          "password",
+          "username"
+        ],
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "$ref" : "#/components/schemas/FirstName"
+          },
+          "lastName" : {
+            "$ref" : "#/components/schemas/LastName"
+          },
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "password" : {
+            "$ref" : "#/components/schemas/Password"
+          }
+        }
+      },
+      "UserSignIn" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "password" : {
+            "$ref" : "#/components/schemas/Password"
+          },
+          "rememberMe" : {
+            "$ref" : "#/components/schemas/RememberMe"
+          }
+        }
+      },
+      "SignInProvider" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "password" : {
+            "$ref" : "#/components/schemas/Password"
+          },
+          "rememberMe" : {
+            "$ref" : "#/components/schemas/RememberMe"
+          }
+        }
+      },
+      "ChangePassword" : {
+        "type" : "object",
+        "properties" : {
+          "currentPassword" : {
+            "$ref" : "#/components/schemas/CurrentPassword"
+          },
+          "newPassword" : {
+            "$ref" : "#/components/schemas/NewPassword"
+          }
+        }
+      },
+      "ResetPassword" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "newPassword" : {
+            "$ref" : "#/components/schemas/NewPassword"
+          }
+        }
+      },
+      "SignedUpUser" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/Id"
+          },
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          },
+          "username" : {
+            "$ref" : "#/components/schemas/Username"
+          },
+          "token" : {
+            "$ref" : "#/components/schemas/Token"
+          }
+        }
+      },
+      "SignedInUser" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "$ref" : "#/components/schemas/Token"
+          }
+        }
+      },
+      "Profile" : {
+        "type" : "object",
+        "properties" : {
+          "loginInfo" : {
+            "$ref" : "#/components/schemas/AuthLoginInfoReadOnly"
+          },
+          "confirmed" : {
+            "type" : "boolean"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "fullName" : {
+            "type" : "string"
+          },
+          "avatarUrl" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AuthLoginInfo" : {
+        "type" : "object",
+        "properties" : {
+          "providerId" : {
+            "type" : "string"
+          },
+          "providerKey" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AuthLoginInfoReadOnly" : {
+        "type" : "object",
+        "properties" : {
+          "providerId" : {
+            "type" : "string",
+            "readOnly" : true
+          },
+          "providerKey" : {
+            "type" : "string",
+            "readOnly" : true
+          }
+        }
+      },
+      "PageInfo" : {
+        "type" : "object",
+        "properties" : {
+          "startIndex" : {
+            "$ref" : "#/components/schemas/StartIndex"
+          },
+          "resultCount" : {
+            "$ref" : "#/components/schemas/ResultCount"
+          },
+          "totalResults" : {
+            "$ref" : "#/components/schemas/TotalResults"
+          }
+        }
+      },
+      "Headers" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "GraphStringResult" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "Properties" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "Attributes" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/components/schemas/Value"
+        }
+      },
+      "AttributeDefinition" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/Id"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/Type"
+          },
+          "metaType" : {
+            "$ref" : "#/components/schemas/MetaType"
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/Name"
+          },
+          "displayName" : {
+            "$ref" : "#/components/schemas/DisplayName"
+          },
+          "isCollection" : {
+            "$ref" : "#/components/schemas/IsCollection"
+          },
+          "isModifiable" : {
+            "$ref" : "#/components/schemas/IsModifiable"
+          },
+          "isMandatory" : {
+            "$ref" : "#/components/schemas/IsMandatory"
+          },
+          "defaultValue" : {
+            "$ref" : "#/components/schemas/Value"
+          },
+          "allowedValues" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/IsModifiable"
+            }
+          }
+        }
+      },
+      "Value" : {
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "$ref" : "#/components/schemas/JsValue"
+          },
+          "unit" : {
+            "$ref" : "#/components/schemas/Unit"
+          }
+        }
+      },
+      "JsValue" : {
+        "type" : "string"
+      },
+      "Ids" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/Id"
+          },
+          "external" : {
+            "$ref" : "#/components/schemas/External"
+          }
+        }
+      },
+      "Keys" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "#/components/schemas/Key"
+          },
+          "external" : {
+            "$ref" : "#/components/schemas/External"
+          }
+        }
+      },
+      "Id" : {
+        "type" : "string",
+        "format" : "uuid"
+      },
+      "Key" : {
+        "type" : "string"
+      },
+      "External" : {
+        "type" : "string"
+      },
+      "Name" : {
+        "type" : "string"
+      },
+      "Description" : {
+        "type" : "string"
+      },
+      "CreatedBy" : {
+        "$ref" : "#/components/schemas/UserReference"
+      },
+      "CreatedDate" : {
+        "type" : "string",
+        "format" : "date-time"
+      },
+      "ModifiedBy" : {
+        "$ref" : "#/components/schemas/UserReference"
+      },
+      "ModifiedDate" : {
+        "type" : "string",
+        "format" : "date-time"
+      },
+      "OtherInfo" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "Email" : {
+        "type" : "string"
+      },
+      "FirstName" : {
+        "type" : "string"
+      },
+      "LastName" : {
+        "type" : "string"
+      },
+      "FullName" : {
+        "type" : "string"
+      },
+      "AvatarURL" : {
+        "type" : "string"
+      },
+      "Username" : {
+        "type" : "string"
+      },
+      "GroupName" : {
+        "type" : "string"
+      },
+      "Activated" : {
+        "type" : "boolean"
+      },
+      "StatusCode" : {
+        "type" : "integer",
+        "format" : "int32"
+      },
+      "StartIndex" : {
+        "type" : "integer",
+        "format" : "int32"
+      },
+      "ResultCount" : {
+        "type" : "integer",
+        "format" : "int32"
+      },
+      "TotalResults" : {
+        "type" : "integer",
+        "format" : "int32"
+      },
+      "Uri" : {
+        "type" : "string"
+      },
+      "Unit" : {
+        "type" : "string"
+      },
+      "Version" : {
+        "type" : "string"
+      },
+      "IsInterModel" : {
+        "type" : "boolean"
+      },
+      "Type" : {
+        "type" : "string"
+      },
+      "MetaType" : {
+        "type" : "string"
+      },
+      "DisplayName" : {
+        "type" : "string"
+      },
+      "IsCollection" : {
+        "type" : "boolean"
+      },
+      "IsModifiable" : {
+        "type" : "boolean"
+      },
+      "IsMandatory" : {
+        "type" : "boolean"
+      },
+      "Password" : {
+        "type" : "string"
+      },
+      "RememberMe" : {
+        "type" : "boolean"
+      },
+      "CurrentPassword" : {
+        "type" : "string"
+      },
+      "NewPassword" : {
+        "type" : "string"
+      },
+      "Token" : {
+        "type" : "string"
+      },
+      "Idstring" : {
+        "type" : "string"
+      },
+      "Label" : {
+        "type" : "string"
+      }
+    },
+    "responses" : {
+      "NotFound" : {
+        "description" : "Entity not found."
+      },
+      "IllegalInput" : {
+        "description" : "Illegal input for operation."
+      },
+      "GeneralError" : {
+        "description" : "General Error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserSeqResponse" : {
+        "description" : "List of User.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserSeqMessage"
+            }
+          }
+        }
+      },
+      "UserObjResponse" : {
+        "description" : "User.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserObjMessage"
+            }
+          }
+        }
+      },
+      "UserCreatedResponse" : {
+        "description" : "User.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserCreatedMessage"
+            }
+          }
+        }
+      },
+      "RepositorySeqResponse" : {
+        "description" : "List of Repository.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositorySeqMessage"
+            }
+          }
+        }
+      },
+      "RepositoryObjResponse" : {
+        "description" : "Repository.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryObjMessage"
+            }
+          }
+        }
+      },
+      "RepositoryCreatedResponse" : {
+        "description" : "Repository.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryCreatedMessage"
+            }
+          }
+        }
+      },
+      "ContainerSeqResponse" : {
+        "description" : "List of Container.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerSeqMessage"
+            }
+          }
+        }
+      },
+      "ContainerObjResponse" : {
+        "description" : "Container.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerObjMessage"
+            }
+          }
+        }
+      },
+      "ContainerCreatedResponse" : {
+        "description" : "Container.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerCreatedMessage"
+            }
+          }
+        }
+      },
+      "ArtifactSeqResponse" : {
+        "description" : "List of Artifact.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactSeqMessage"
+            }
+          }
+        }
+      },
+      "ArtifactObjResponse" : {
+        "description" : "Artifact.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactObjMessage"
+            }
+          }
+        }
+      },
+      "ArtifactCreatedResponse" : {
+        "description" : "Artifact.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactCreatedMessage"
+            }
+          }
+        }
+      },
+      "RelationSeqResponse" : {
+        "description" : "List of Relation.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationSeqMessage"
+            }
+          }
+        }
+      },
+      "RelationObjResponse" : {
+        "description" : "Relation.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationObjMessage"
+            }
+          }
+        }
+      },
+      "RelationCreatedResponse" : {
+        "description" : "Relation.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationCreatedMessage"
+            }
+          }
+        }
+      },
+      "RepositoryTypeSeqResponse" : {
+        "description" : "List of Repository Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryTypeSeqMessage"
+            }
+          }
+        }
+      },
+      "RepositoryTypeObjResponse" : {
+        "description" : "Repository Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryTypeObjMessage"
+            }
+          }
+        }
+      },
+      "RepositoryTypeCreatedResponse" : {
+        "description" : "Repository Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryTypeCreatedMessage"
+            }
+          }
+        }
+      },
+      "ContainerTypeSeqResponse" : {
+        "description" : "List of Container Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerTypeSeqMessage"
+            }
+          }
+        }
+      },
+      "ContainerTypeObjResponse" : {
+        "description" : "Container Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerTypeObjMessage"
+            }
+          }
+        }
+      },
+      "ContainerTypeCreatedResponse" : {
+        "description" : "Container Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerTypeCreatedMessage"
+            }
+          }
+        }
+      },
+      "ArtifactTypeSeqResponse" : {
+        "description" : "List of Artifact Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactTypeSeqMessage"
+            }
+          }
+        }
+      },
+      "ArtifactTypeObjResponse" : {
+        "description" : "Artifact Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactTypeObjMessage"
+            }
+          }
+        }
+      },
+      "ArtifactTypeCreatedResponse" : {
+        "description" : "Artifact Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactTypeCreatedMessage"
+            }
+          }
+        }
+      },
+      "RelationTypeSeqResponse" : {
+        "description" : "List of Relation Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationTypeSeqMessage"
+            }
+          }
+        }
+      },
+      "RelationTypeObjResponse" : {
+        "description" : "Relation Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationTypeObjMessage"
+            }
+          }
+        }
+      },
+      "RelationTypeCreatedResponse" : {
+        "description" : "Relation Type.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationTypeCreatedMessage"
+            }
+          }
+        }
+      },
+      "GraphResponse" : {
+        "description" : "Graph.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Graph"
+            }
+          }
+        }
+      },
+      "RawGraphResponse" : {
+        "description" : "Graph.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RawGraph"
+            }
+          }
+        }
+      },
+      "SignInCreatedResponse" : {
+        "description" : "SignIn.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/SignInCreatedMessage"
+            }
+          }
+        }
+      },
+      "SignUpCreatedResponse" : {
+        "description" : "SignUp.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/SignUpCreatedMessage"
+            }
+          }
+        }
+      },
+      "SignOutResponses" : {
+        "description" : "successful operation.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ChangePasswordResponses" : {
+        "description" : "successful operation",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ResetPasswordResponse" : {
+        "description" : "successful operation",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "SignUpSuperUserResponses" : {
+        "description" : "successful operation.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "parameters" : {
+      "Key" : {
+        "name" : "key",
+        "in" : "path",
+        "description" : "key that needs to be considered for filter",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "ExtId" : {
+        "name" : "extId",
+        "in" : "path",
+        "description" : "external id that needs to be considered for filter",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "UserNamePath" : {
+        "name" : "username",
+        "in" : "path",
+        "description" : "username that needs to be considered for filter",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "Ver" : {
+        "name" : "version",
+        "in" : "path",
+        "description" : "version that needs to be considered for filter",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "GraphQuery" : {
+        "name" : "query",
+        "in" : "path",
+        "description" : "query that needs to be sent to the server",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "StartKey" : {
+        "name" : "startKey",
+        "in" : "path",
+        "description" : "startKey",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "EndKey" : {
+        "name" : "endKey",
+        "in" : "path",
+        "description" : "endKey",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "AttributeId" : {
+        "name" : "id",
+        "in" : "path",
+        "description" : "attribute id",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "GoupName" : {
+        "name" : "groupName",
+        "in" : "query",
+        "description" : "group name",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "UserName" : {
+        "name" : "userName",
+        "in" : "query",
+        "description" : "group name",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "ExternalKey" : {
+        "name" : "external.key",
+        "in" : "query",
+        "description" : "external key of the object",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "ExternalId" : {
+        "name" : "external.id",
+        "in" : "query",
+        "description" : "external id of the object",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "Context" : {
+        "name" : "context",
+        "in" : "query",
+        "description" : "auth Context",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "PrincipalKey" : {
+        "name" : "principal.key",
+        "in" : "query",
+        "description" : "auth Context",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "PrincipalType" : {
+        "name" : "principal.type",
+        "in" : "query",
+        "description" : "principal type",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "RoleKey" : {
+        "name" : "role.key",
+        "in" : "query",
+        "description" : "role key",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "Uri" : {
+        "name" : "uri",
+        "in" : "query",
+        "description" : "uri",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "TypeKey" : {
+        "name" : "type.key",
+        "in" : "query",
+        "description" : "type key",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "IsInternal" : {
+        "name" : "isInternal",
+        "in" : "query",
+        "description" : "auth Context",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "RepositoryKey" : {
+        "name" : "repository.key",
+        "in" : "query",
+        "description" : "repository Keycontainer.key",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "ContainerKey" : {
+        "name" : "container.key",
+        "in" : "query",
+        "description" : "container key",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "Version" : {
+        "name" : "version",
+        "in" : "query",
+        "description" : "version",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "SourceKey" : {
+        "name" : "source.key",
+        "in" : "query",
+        "description" : "source key",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "SourceVersion" : {
+        "name" : "source.version",
+        "in" : "query",
+        "description" : "source version",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "TargetKey" : {
+        "name" : "target.key",
+        "in" : "query",
+        "description" : "target key",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "TargetVersion" : {
+        "name" : "target.version",
+        "in" : "query",
+        "description" : "target version",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }
+    },
+    "examples" : {
+      "UserSignUp" : {
+        "summary" : "A sample object",
+        "value" : {
+          "firstName" : "mickey",
+          "lastName" : "mouse",
+          "username" : "mickey.mouse@example.com",
+          "password" : "mickey@mouse"
+        }
+      }
+    },
+    "requestBodies" : {
+      "UserSignUpBody" : {
+        "description" : "User info for sign-up.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserSignUp"
+            },
+            "example" : {
+              "firstName" : "mickey",
+              "lastName" : "mouse",
+              "username" : "mickey.mouse@example.com",
+              "password" : "mickey@mouse"
+            }
+          }
+        },
+        "required" : true
+      },
+      "UserSignInBody" : {
+        "description" : "User info for sign-in.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserSignIn"
+            },
+            "example" : {
+              "username" : "mickey.mouse@example.com",
+              "password" : "mickey@mouse",
+              "rememberMe" : true
+            }
+          }
+        },
+        "required" : true
+      },
+      "SignInProviderBody" : {
+        "description" : "User info for change password.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/SignInProvider"
+            },
+            "example" : {
+              "username" : "mickey.mouse",
+              "password" : "mickeyldap",
+              "rememberMe" : true
+            }
+          }
+        },
+        "required" : true
+      },
+      "ChangePasswordBody" : {
+        "description" : "User info for change password.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ChangePassword"
+            },
+            "example" : {
+              "currentPassword" : "oldpassowrd",
+              "newPassword" : "newpassword"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ResetPasswordBody" : {
+        "description" : "User info for change password.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ResetPassword"
+            },
+            "example" : {
+              "username" : "mickey.mouse@example.com",
+              "newPassword" : "newpassword"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RepositoryCreateBody" : {
+        "description" : "Repository object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RepositoryUpdateBody" : {
+        "description" : "Update the repository (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ContainerCreateBody" : {
+        "description" : "Container object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ContainerUpdateBody" : {
+        "description" : "Update the Container (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ArtifactCreateBody" : {
+        "description" : "Artifact object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ArtifactUpdateBody" : {
+        "description" : "Update the artifact (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RelationCreateBody" : {
+        "description" : "Relation object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RelationUpdateBody" : {
+        "description" : "Update the Relation (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RepositoryTypeCreateBody" : {
+        "description" : "RepositoryType object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryTypeCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RepositoryTypeUpdateBody" : {
+        "description" : "Update the RepositoryType (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RepositoryTypeUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ContainerTypeCreateBody" : {
+        "description" : "ContainerType object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerTypeCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ContainerTypeUpdateBody" : {
+        "description" : "Update the ContainerType (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ContainerTypeUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ArtifactTypeCreateBody" : {
+        "description" : "ArtifactType object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactTypeCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "ArtifactTypeUpdateBody" : {
+        "description" : "Update the ArtifactType (with given key) with the given details",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ArtifactTypeUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RelationTypeCreateBody" : {
+        "description" : "RelationType object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationTypeCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "RelationTypeUpdateBody" : {
+        "description" : "Update the RelationType (with given key) with the given details",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RelationTypeUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "UserCreateBody" : {
+        "description" : "User object that needs to be created.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserCreate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "UserUpdateBody" : {
+        "description" : "Update the User (with given key) with the given details.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserUpdate"
+            }
+          }
+        },
+        "required" : true
+      },
+      "GraphQueryBody" : {
+        "description" : "Graph query that needs to be sent to the server.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/GraphQuery"
+            }
+          }
+        },
+        "required" : true
+      }
+    },
+    "securitySchemes" : {
+      "UserSecurity" : {
+        "type" : "apiKey",
+        "name" : "X-Auth-Token",
+        "in" : "header"
+      }
+    }
+  }
+}

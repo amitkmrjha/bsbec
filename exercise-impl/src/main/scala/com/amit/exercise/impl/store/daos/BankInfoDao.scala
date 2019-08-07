@@ -1,0 +1,41 @@
+package com.amit.exercise.impl.store.daos
+
+import akka.Done
+import com.amit.exercise.{BankInfo}
+import com.amit.exercise.impl.daos.EntityDao
+import com.amit.exercise.impl.store.store.Columns
+import com.amit.exercise.impl.table.BankInfoTable
+import com.datastax.driver.core.Row
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
+
+import scala.concurrent.{ExecutionContext, Future}
+
+abstract class AbstractBankInfoDao[T <:BankInfo](session: CassandraSession)(implicit ec: ExecutionContext) extends EntityDao[T] {
+  override protected def sessionSelectAll(queryString: String): Future[Seq[T]] = {
+    session.selectAll(queryString).map(_.map(convert))
+  }
+
+  override protected def sessionSelectOne(queryString: String): Future[Option[T]] = {
+    session.selectOne(queryString).map(_.map(convert))
+  }
+
+  protected def name(r: Row):String = r.getString(Columns.Name)
+
+  protected def identifier(r: Row):String = r.getString(Columns.Identifier)
+}
+
+class BankInfoDao(session: CassandraSession)(implicit ec: ExecutionContext) extends AbstractBankInfoDao[BankInfo](session){
+
+  def getByIdentifier(identifier: String): Future[Option[BankInfo]] = {
+    sessionSelectOne(BankInfoTable.queryByIdentifier(identifier))
+  }
+
+  override protected def convert(r: Row): BankInfo = {
+    BankInfo(id(r), name(r), identifier(r))
+  }
+
+  def deleteByTitle(identifier: String): Future[Done] = {
+    session.executeWrite(BankInfoTable.deleteByIdentifier(identifier))
+  }
+}
+

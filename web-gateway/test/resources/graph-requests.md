@@ -1,0 +1,36 @@
+**Create a vertex**
+
+curl --request POST \
+  --url http://localhost:9000/graph/vertex/ART1 \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxLWdXdHR6VGdIU2tnT2lCOVFJZTViYzRzSHZMemlwU3BLU0xjbk5rbjVGYjVuYUtibFRsSzVOV1AwZjh5K1JveGFcL1J3ajl2cjROVzhIMG9NMk9Kbkp5dXZvRmRpSDk3cTR0dTYrOXc9PSIsImlzcyI6IlN5bmRlaWEtQ2xvdWQtc2lsaG91ZXR0ZSIsInBlcm1pc3Npb24iOlsiYWRtaW4iLCJSRVBPU0lUT1JZX0NSRUFURSIsIlJFTEFUSU9OX0NSRUFURSIsIkFSVElGQUNUX0NSRUFURSJdLCJleHAiOjE1MzU1NzE3MjUsImlhdCI6MTUzNTUyODUyNSwianRpIjoiNTBiODhjNjk0MDE3M2U2NTM3MzM4Y2NjYzNlMmI1YjNkMWM0ZjNlNGU5ZWI5YzhmNTQ2NWYzZjY1Y2I3MGRlOGI4MWViMjY1ZGQyMTM2NDhkNmExMjkzMzYyMDdiNTE4ZWEwMWIwNTIwNWQ1MmUwMjRiM2YwODgxNWE4NzA2OWFiYTY1ODQ4YTI0N2E1NjM2NDhmZDg4ZjZiZmMxNjgwMjc0YzA1MTJiOWQwNjBkMDQ5ZTY4ZTZmOWFjNWMwN2I0NmFiYTI1YmY5MjIyN2I1MzljY2Y5MTljNjcwNzE0MTYwMWM5YmVjMzU1MTY0NzBmODRiNGNkMzAxNDAzNGNlNyJ9.jybnQyDLl5ZWnhHqxiFU6peX1zsq7ZzO7aKdIv54_mk' \
+  --data '{
+    "name":"Artifact1",
+    "version": "1.0",
+    	"externalId": "ext-id-1"
+    	"externalKey": "ext-key-1"
+}'
+
+**Create an edge**
+
+curl --request POST \
+  --url http://localhost:9000/graph/edge/ART1/ART2/E1 \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxLWdXdHR6VGdIU2tnT2lCOVFJZTViYzRzSHZMemlwU3BLU0xjbk5rbjVGYjVuYUtibFRsSzVOV1AwZjh5K1JveGFcL1J3ajl2cjROVzhIMG9NMk9Kbkp5dXZvRmRpSDk3cTR0dTYrOXc9PSIsImlzcyI6IlN5bmRlaWEtQ2xvdWQtc2lsaG91ZXR0ZSIsInBlcm1pc3Npb24iOlsiYWRtaW4iLCJSRVBPU0lUT1JZX0NSRUFURSIsIlJFTEFUSU9OX0NSRUFURSIsIkFSVElGQUNUX0NSRUFURSJdLCJleHAiOjE1MzU1NzE3MjUsImlhdCI6MTUzNTUyODUyNSwianRpIjoiNTBiODhjNjk0MDE3M2U2NTM3MzM4Y2NjYzNlMmI1YjNkMWM0ZjNlNGU5ZWI5YzhmNTQ2NWYzZjY1Y2I3MGRlOGI4MWViMjY1ZGQyMTM2NDhkNmExMjkzMzYyMDdiNTE4ZWEwMWIwNTIwNWQ1MmUwMjRiM2YwODgxNWE4NzA2OWFiYTY1ODQ4YTI0N2E1NjM2NDhmZDg4ZjZiZmMxNjgwMjc0YzA1MTJiOWQwNjBkMDQ5ZTY4ZTZmOWFjNWMwN2I0NmFiYTI1YmY5MjIyN2I1MzljY2Y5MTljNjcwNzE0MTYwMWM5YmVjMzU1MTY0NzBmODRiNGNkMzAxNDAzNGNlNyJ9.jybnQyDLl5ZWnhHqxiFU6peX1zsq7ZzO7aKdIv54_mk' \
+  --data '{
+    "name":"SampleEdge",
+    "version": "1.0",
+}'
+ 
+**Get query result**
+ 
+ curl --request GET \
+   --url http://localhost:9000/api/v1/graph/g.V().has('keyVal', 'ATR7')/query \
+   --header 'X-Auth-Token: token'
+  
+**Get raw query result**
+
+curl --request GET \
+  --url http://localhost:9000/api/v1/graph/g.V().has('keyVal', 'ATR7')/query/raw \
+  --header 'X-Auth-Token: token'
+  
