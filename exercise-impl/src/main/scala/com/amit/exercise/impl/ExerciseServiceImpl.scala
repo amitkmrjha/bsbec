@@ -3,7 +3,7 @@ package com.amit.exercise.impl
 
 import akka.NotUsed
 import akka.stream.scaladsl.Source
-import com.amit.exercise.{BankInfo, BlackListIp, Category, Contract}
+import com.amit.exercise._
 import com.amit.exercise.api.ExerciseService
 import com.amit.exercise.impl.store.daos.{BankInfoDao, BlackListIpDao, CategoryDao}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
@@ -85,6 +85,8 @@ class ExerciseServiceImpl(
       case ex: Exception => throw ex
     }
   }
+
+  override def getKeyWordTitle: ServiceCall[Seq[String], Seq[KeyWordTitle]] = ???
 
   override def deleteCategory(title: String): ServiceCall[NotUsed, String] = ServiceCall { _ =>
     categoryDao.delete(title).map(x =>

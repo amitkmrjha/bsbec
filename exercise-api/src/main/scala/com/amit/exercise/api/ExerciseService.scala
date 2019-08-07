@@ -2,7 +2,7 @@ package com.amit.exercise.api
 
 import akka.NotUsed
 import akka.stream.scaladsl.Source
-import com.amit.exercise.{BankInfo, BlackListIp, Category}
+import com.amit.exercise.{BankInfo, BlackListIp, Category, KeyWordTitle}
 import com.amit.exercise
 import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{Descriptor, Service, ServiceCall}
@@ -31,6 +31,7 @@ trait ExerciseService extends Service {
   def createCategory:ServiceCall[Category, Category]
   def deleteCategory(title:String): ServiceCall[NotUsed, String]
   def getCategoryByTitle(title:String): ServiceCall[NotUsed, Category]
+  def getKeyWordTitle:ServiceCall[Seq[String], Seq[KeyWordTitle]]
 
 
   override final def descriptor: Descriptor = {
@@ -52,7 +53,8 @@ trait ExerciseService extends Service {
 
         restCall(Method.POST, "/api/v1/category", createCategory _),
         restCall(Method.DELETE, "/api/v1/category/:title", deleteCategory _),
-        restCall(Method.GET, "/api/v1/category/:title", getCategoryByTitle _)
+        restCall(Method.GET, "/api/v1/category/:title", getCategoryByTitle _),
+        restCall(Method.POST, "/api/v1/category/keyword", getKeyWordTitle _),
       ).withAutoAcl(true)
   }
 }
