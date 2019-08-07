@@ -38,7 +38,11 @@ class ExerciseServiceImpl(
     }
   }
 
-  override def createBankInfo: ServiceCall[BankInfo, BankInfo] = ???
+  override def createBankInfo: ServiceCall[BankInfo, BankInfo] = ServiceCall { bi =>
+    bankInfoDao.create(bi).map(x=>x).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
   override def deleteBankInfo(identifier: String): ServiceCall[NotUsed, BankInfo] = ???
 

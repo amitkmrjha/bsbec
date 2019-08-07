@@ -9,8 +9,11 @@ import com.datastax.driver.core.querybuilder.{Delete, Insert, QueryBuilder}
 import scala.collection.JavaConverters._
 import com.datastax.driver.core.querybuilder.QueryBuilder
 import com.datastax.driver.core.utils.UUIDs
+import play.api.Logger
 
 object BankInfoTable extends EntityTable[BankInfo]{
+
+  val logger = Logger(this.getClass)
 
   override protected def tableScript: String =
     s"""
@@ -45,7 +48,8 @@ object BankInfoTable extends EntityTable[BankInfo]{
   override protected def getInsertBindValues(entity: BankInfo): Seq[AnyRef] = {
     val bindValues: Seq[AnyRef] = fields.map(x => x match {
       case Columns.Id => entity.id.getOrElse(UUIDs.timeBased())
-      case Columns.Ip => entity.identifier
+      case Columns.Name => entity.name
+      case Columns.Identifier => entity.identifier
     })
     bindValues
   }

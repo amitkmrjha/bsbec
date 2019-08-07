@@ -33,7 +33,7 @@
   <logger name="com.mohiva" level="ERROR" />
   <logger name="com.mohiva.play.silhouette.api.Silhouette" level="INFO" />
 
-  <root level="INFO">
+  <root level="DEBUG">
     <appender-ref ref="ASYNCSTDOUT" />
   </root>
 
