@@ -49,9 +49,6 @@ class BlackListIpDao (session: CassandraSession)(implicit ec: ExecutionContext) 
   }
 
   def create(blackListIp: BlackListIp): Future[BlackListIp] = {
-    BlackListIpTable.insert(blackListIp)(session,ec).flatMap{
-      case Some(bs) =>  session.executeWrite(bs).map(_ => blackListIp)
-      case None => throw new Exception(s"Unable to prepare insert statement for ${BlackListIp}")
-    }
+    BlackListIpTable.insert(blackListIp)(session,ec).flatMap{ bs => session.executeWrite(bs).map(_ => blackListIp)}
   }
 }

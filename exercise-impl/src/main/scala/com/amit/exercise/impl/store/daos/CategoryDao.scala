@@ -4,13 +4,14 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import akka.Done
-import com.amit.exercise.Category
+import com.amit.exercise.{Category, KeyWordTitle}
 import com.amit.exercise.impl.daos.EntityDao
 import com.amit.exercise.impl.store.store.Columns
-import com.amit.exercise.impl.table.CategoryTable
-import com.datastax.driver.core.Row
+import com.amit.exercise.impl.table.{CategoryTable, KeyWordTitleTable}
+import com.datastax.driver.core.{BatchStatement, BoundStatement, Row}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.amit.exercise.util.LocalDateTimeConverters._
+import com.datastax.driver.core.utils.UUIDs
 import play.api.Logger
 
 import scala.collection.JavaConverters._
@@ -30,6 +31,8 @@ abstract class AbstractCategoryDao[T <:Category](session: CassandraSession)(impl
 
   protected def title(r: Row):String = r.getString(Columns.Title)
 
+  protected def keyWord(r: Row):String =  r.getString(Columns.KeyWord)
+
   protected def keyWords(r: Row):Seq[String] = r.getSet(Columns.KeyWords, classOf[String]).asScala.toSeq
 
   protected def creationDate(r: Row):Option[LocalDateTime]= Option(r.getTimestamp(Columns.CreationDate).toLocalDateTime)
@@ -41,9 +44,13 @@ class CategoryDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
 
   val logger = Logger(this.getClass)
 
-  val lazyPrepare = CategoryTable.prepareStatement()(session,ec).map(x=>
-    logger.debug(s"Category Prepare statement ${x}")
-  )
+  for{
+    ct <-  CategoryTable.prepareStatement()(session,ec)
+    kt <-  KeyWordTitleTable.prepareStatement()(session,ec)
+  }yield{
+    logger.debug(s"Category Prepare statement ${ct}")
+    logger.debug(s"KeyWordTitle Prepare statement ${kt}")
+  }
 
   def getByTitle(title: String): Future[Option[Category]] = {
     sessionSelectOne(CategoryTable.queryByTitle(title))
@@ -58,9 +65,37 @@ class CategoryDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
   }
 
   def create(category:Category): Future[Category] = {
-    CategoryTable.insert(category)(session,ec).flatMap{
-      case Some(bs) =>  session.executeWrite(bs).map(_ => category)
-      case None => throw new Exception(s"Unable to prepare insert statement for ${category}")
+    baseAndView(category).map(_ => category)
+  }
+
+  protected def createKeyWordTitle(category:Category):Future[Done] = {
+    KeyWordTitleTable.insertSeq( toCreateKeyWordTitle(category))(session,ec).flatMap{bsSeq =>
+      executeBatch(bsSeq)
     }
   }
+
+  protected def toCreateKeyWordTitle(category:Category):Seq[KeyWordTitle]= {
+    category.keywords.map(x => KeyWordTitle(Option(UUIDs.timeBased()),category.title,x))
+  }
+
+  private def executeBatch(statements: Seq[BoundStatement]): Future[Done] = {
+    val batch = new BatchStatement
+    // statements is never empty, there is at least the store offset statement
+    // for simplicity we just use batch api (even if there is only one)
+    batch.addAll(statements.asJava)
+    session.executeWriteBatch(batch)
+  }
+
+  private def baseAndView(category:Category):Future[Done] = {
+    for{
+      basePS <- CategoryTable.insert(category)(session,ec)
+      baseInsert <- session.executeWrite(basePS)
+      ktView <- KeyWordTitleTable.insertSeq( toCreateKeyWordTitle(category))(session,ec)
+      ktViewInsert <- executeBatch(ktView)
+    }yield{
+      Done.getInstance()
+    }
+  }
+
+
 }

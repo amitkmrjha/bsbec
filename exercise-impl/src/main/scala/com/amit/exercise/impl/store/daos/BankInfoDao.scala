@@ -48,10 +48,7 @@ class BankInfoDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
   }
 
   def create(bankInfo:BankInfo): Future[BankInfo] = {
-    BankInfoTable.insert(bankInfo)(session,ec).flatMap{
-      case Some(bs) =>  session.executeWrite(bs).map(_ => bankInfo)
-      case None => throw new Exception(s"Unable to prepare insert statement for ${bankInfo}")
-    }
+    BankInfoTable.insert(bankInfo)(session,ec).flatMap{ bs => session.executeWrite(bs).map(_ => bankInfo)}
   }
 }
 

@@ -41,9 +41,9 @@ trait EntityTable[T <: Entity] {
   protected def getAllQueryString: String
 
   def insert(t:T)
-            (implicit session: CassandraSession, ec: ExecutionContext):Future[Option[BoundStatement]] =  {
+            (implicit session: CassandraSession, ec: ExecutionContext):Future[BoundStatement] =  {
     val bindV = getInsertBindValues(t)
-    bindPrepare(insertPromise,bindV).map(x => Some(x))
+    bindPrepare(insertPromise,bindV)
   }
 
   def insert(ts:Seq[T])

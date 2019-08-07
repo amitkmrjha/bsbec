@@ -9,3 +9,8 @@ case class Category(id: Option[UUID], `type`: Option[String], title: String, key
 object Category {
   implicit val categoryFormat: Format[Category] = Json.format[Category]
 }
+
+case class KeyWordTitle(id: Option[UUID], title: String, keyword: String) extends Entity
+object KeyWordTitle {
+  implicit val keyWordCategoryFormat: Format[KeyWordTitle] = Json.format[KeyWordTitle]
+}

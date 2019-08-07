@@ -28,3 +28,10 @@ creation_date timestamp,
 PRIMARY KEY (title)
 ) ;
 
+CREATE TABLE IF NOT EXISTS bsbecexercise.keyword_title (
+id timeuuid,
+keyword text,
+title text,
+PRIMARY KEY (keyword)
+) ;
+
