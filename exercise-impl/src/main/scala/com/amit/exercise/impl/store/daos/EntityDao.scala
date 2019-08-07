@@ -20,4 +20,8 @@ trait EntityDao[T <: Entity] {
 
   protected def id(r: Row):Option[UUID] = Option(r.getUUID(Columns.Id))
 
+  protected def createSequentially(seq: Seq[T])(f: T => Future[T])(implicit ec:ExecutionContext): Future[Seq[T]] =
+    seq.foldLeft(Future.successful(Seq.empty[T])) {
+      case (acc, nxt) => acc.flatMap(bs => f(nxt).map(b => bs :+ b))
+    }
 }

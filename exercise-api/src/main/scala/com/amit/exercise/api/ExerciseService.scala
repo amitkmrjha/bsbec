@@ -20,6 +20,7 @@ trait ExerciseService extends Service {
 
 
   def createBankInfo:ServiceCall[BankInfo, BankInfo]
+  def createBankInfoSeq:ServiceCall[Seq[BankInfo], Seq[BankInfo]]
   def deleteBankInfo(identifier:String): ServiceCall[NotUsed, String]
   def getBankInfoByIdentifier(identifier:String): ServiceCall[NotUsed, BankInfo]
 
@@ -32,8 +33,6 @@ trait ExerciseService extends Service {
   def getCategoryByTitle(title:String): ServiceCall[NotUsed, Category]
 
 
-  //
-
   override final def descriptor: Descriptor = {
     import Service._
 
@@ -43,6 +42,7 @@ trait ExerciseService extends Service {
         restCall(Method.POST, "/api/v1/url/dynamic/part", urlDynamicPart _),
 
         restCall(Method.POST, "/api/v1/bank/info", createBankInfo _),
+        restCall(Method.POST, "/api/v1/bank/info/upload", createBankInfoSeq _),
         restCall(Method.DELETE, "/api/v1/bank/info/:identifier", deleteBankInfo _),
         restCall(Method.GET, "/api/v1/bank/info/:identifier", getBankInfoByIdentifier _),
 

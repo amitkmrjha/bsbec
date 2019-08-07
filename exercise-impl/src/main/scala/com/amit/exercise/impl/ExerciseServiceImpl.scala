@@ -46,6 +46,12 @@ class ExerciseServiceImpl(
     }
   }
 
+  override def createBankInfoSeq: ServiceCall[Seq[BankInfo], Seq[BankInfo]] = ServiceCall { biSeq =>
+    bankInfoDao.createBulk(biSeq).recover {
+      case ex: Exception => throw ex
+    }
+  }
+
   override def deleteBankInfo(identifier: String): ServiceCall[NotUsed, String] =  ServiceCall { bi =>
     bankInfoDao.deleteByIdentifier(identifier).map(x =>
       s"Bank Info with identifier ${identifier} delete ${x} "
@@ -96,4 +102,6 @@ class ExerciseServiceImpl(
       case ex: Exception => throw ex
     }
   }
+
+
 }

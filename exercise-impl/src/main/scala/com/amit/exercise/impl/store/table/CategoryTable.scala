@@ -136,6 +136,12 @@ object KeyWordTitleTable extends EntityTable[KeyWordTitle] {
     select.toString
   }
 
+  def queryByInKeyWords(keyWords: Seq[String]): String = {
+    val select = QueryBuilder.select().from(tableName)
+      .where(QueryBuilder.in(Columns.KeyWord,keyWords))
+    select.toString
+  }
+
   def deleteByTitle(title: String): String = {
     val select = QueryBuilder.delete().from(tableName)
       .where(QueryBuilder.eq(Columns.Title,title))

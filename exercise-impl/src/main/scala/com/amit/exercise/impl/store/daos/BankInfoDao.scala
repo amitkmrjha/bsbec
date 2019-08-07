@@ -25,6 +25,8 @@ abstract class AbstractBankInfoDao[T <:BankInfo](session: CassandraSession)(impl
   protected def name(r: Row):String = r.getString(Columns.Name)
 
   protected def identifier(r: Row):String = r.getString(Columns.Identifier)
+
+
 }
 
 class BankInfoDao(session: CassandraSession)(implicit ec: ExecutionContext) extends AbstractBankInfoDao[BankInfo](session){
@@ -49,6 +51,10 @@ class BankInfoDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
 
   def create(bankInfo:BankInfo): Future[BankInfo] = {
     BankInfoTable.insert(bankInfo)(session,ec).flatMap{ bs => session.executeWrite(bs).map(_ => bankInfo)}
+  }
+
+  def createBulk(tCreateSeq: Seq[BankInfo])(implicit ec: ExecutionContext): Future[Seq[BankInfo]] = {
+    createSequentially(tCreateSeq)(create)
   }
 }
 

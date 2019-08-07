@@ -10,6 +10,8 @@ GET     /                           com.amit.bsbec.controllers.HomeController.in
 GET     /bank/info/:identifier   com.amit.bsbec.controllers.BankInfoController.getByIdentifier(identifier:String)
 POST    /bank/info               com.amit.bsbec.controllers.BankInfoController.createBankInfo
 DELETE  /bank/info/:identifier              com.amit.bsbec.controllers.BankInfoController.deleteBankInfo(identifier:String)
++ nocsrf
+POST    /bank/info/upload                     com.amit.bsbec.controllers.BankInfoController.uploadInfo
 
 GET     /contract/:typekey              com.amit.bsbec.controllers.ContractController.processContract(typekey:String)
 
@@ -17,6 +19,8 @@ GET     /contract/:typekey              com.amit.bsbec.controllers.ContractContr
 GET     /category/:title        com.amit.bsbec.controllers.CategoryController.getByTitle(title:String)
 POST    /category               com.amit.bsbec.controllers.CategoryController.createCategory
 DELETE  /category/:title        com.amit.bsbec.controllers.CategoryController.deleteCategory(title:String)
+
+
 
 
 
