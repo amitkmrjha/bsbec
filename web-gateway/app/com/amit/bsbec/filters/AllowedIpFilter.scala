@@ -23,13 +23,16 @@ class AllowedIpFilter (cache: AsyncCacheApi,exerciseService: ExerciseService,err
     val remoteIp = remoteIpAddress(requestHeader)
 
     isValidIP(remoteIp).flatMap{
-      case true => errorHandler.onClientError(requestHeader, Status.BAD_REQUEST, s"Ip not allowed: ${remoteIp}")
-      case false =>   nextFilter(requestHeader)
+      case true => nextFilter(requestHeader)
+      case false =>   errorHandler.onClientError(requestHeader, Status.BAD_REQUEST, s"Ip not allowed: ${remoteIp}")
     }
   }
 
   private def isValidIP(dotIp: String): Future[Boolean] = cache.getOrElseUpdate[Boolean](dotIp) {
-    isBlackListIp(dotIp)
+    isBlackListIp(dotIp)map{
+      case false => true
+      case true => false
+    }
   }
 
   private def remoteIpAddress(request: RequestHeader):String = {
@@ -42,7 +45,7 @@ class AllowedIpFilter (cache: AsyncCacheApi,exerciseService: ExerciseService,err
   private def isBlackListIp(dotIp: String):Future[Boolean] = {
     logger.debug(s"validating ip [${dotIp}] with exercise service black list ip store. ")
     val longIp = IPv4ToLong(dotIp)
-    exerciseService.isBlackListIp(longIp).invoke.recover{
+    exerciseService.isBlackListIp(longIp).invoke.map{x =>x}.recover{
       case ex:Exception =>
         logger.debug(s"AllowedIpFilter isBlackListIp exception ${ex.getMessage}")
         false
