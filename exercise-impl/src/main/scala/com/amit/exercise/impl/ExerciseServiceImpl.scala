@@ -5,7 +5,7 @@ import akka.NotUsed
 import akka.stream.scaladsl.Source
 import com.amit.exercise._
 import com.amit.exercise.api.ExerciseService
-import com.amit.exercise.impl.store.daos.{BankInfoDao, BlackListIpDao, CategoryDao}
+import com.amit.exercise.impl.store.daos.{BankInfoDao, BlackListIpDao, CategoryDao, KeyWordTitleDao}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
@@ -19,6 +19,7 @@ class ExerciseServiceImpl(
                            bankInfoDao: BankInfoDao,
                            blackListIpDao: BlackListIpDao,
                            categoryDao: CategoryDao,
+                           keyWordTitleDao:KeyWordTitleDao,
                            messagesApi: MessagesApi,
                            languages: Langs)
 (implicit ec: ExecutionContext) extends ExerciseService {
@@ -86,7 +87,11 @@ class ExerciseServiceImpl(
     }
   }
 
-  override def getKeyWordTitle: ServiceCall[Seq[String], Seq[KeyWordTitle]] = ???
+  override def getKeyWordTitle: ServiceCall[Seq[String], Seq[KeyWordTitle]] = ServiceCall { keywords =>
+    keyWordTitleDao.getKeyWordTitle(keywords).recover {
+      case ex: Exception => throw ex
+    }
+  }
 
   override def deleteCategory(title: String): ServiceCall[NotUsed, String] = ServiceCall { _ =>
     categoryDao.delete(title).map(x =>

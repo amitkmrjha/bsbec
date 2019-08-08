@@ -29,9 +29,14 @@ class AllowedIpFilter (cache: AsyncCacheApi,exerciseService: ExerciseService,err
   }
 
   private def isValidIP(dotIp: String): Future[Boolean] = cache.getOrElseUpdate[Boolean](dotIp) {
-    isBlackListIp(dotIp)map{
+    val longIp = IPv4ToLong(dotIp)
+    exerciseService.isBlackListIp(longIp).invoke.map{
       case false => true
       case true => false
+    }.recover{
+      case ex:Exception =>
+        logger.debug(s"AllowedIpFilter isBlackListIp exception ${ex.getMessage}")
+        true
     }
   }
 
@@ -40,16 +45,6 @@ class AllowedIpFilter (cache: AsyncCacheApi,exerciseService: ExerciseService,err
     // see http://johannburkard.de/blog/programming/java/x-forwarded-for-http-header.html
     request.headers.get("X-Forwarded-For").map(_.split(",").head).getOrElse(
       request.headers.get("Remote_Addr").getOrElse(request.remoteAddress))
-  }
-
-  private def isBlackListIp(dotIp: String):Future[Boolean] = {
-    logger.debug(s"validating ip [${dotIp}] with exercise service black list ip store. ")
-    val longIp = IPv4ToLong(dotIp)
-    exerciseService.isBlackListIp(longIp).invoke.map{x =>x}.recover{
-      case ex:Exception =>
-        logger.debug(s"AllowedIpFilter isBlackListIp exception ${ex.getMessage}")
-        false
-    }
   }
 
   private def IPv4ToLong(dottedIP: String): Long = {

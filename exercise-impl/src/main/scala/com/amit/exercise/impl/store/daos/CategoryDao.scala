@@ -56,6 +56,8 @@ class CategoryDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
     sessionSelectOne(CategoryTable.queryByTitle(title))
   }
 
+
+
   override protected def convert(r: Row): Category = {
     Category(id(r), `type`(r), title(r), keyWords(r), creationDate(r))
   }
@@ -110,6 +112,36 @@ class CategoryDao(session: CassandraSession)(implicit ec: ExecutionContext) exte
       Done.getInstance()
     }
   }
+}
 
+abstract class AbstractKeyWordTitleDao[T <:KeyWordTitle](session: CassandraSession)(implicit ec: ExecutionContext) extends EntityDao[T]{
 
+  override protected def sessionSelectAll(queryString: String): Future[Seq[T]] = {
+    session.selectAll(queryString).map(_.map(convert))
+  }
+
+  override protected def sessionSelectOne(queryString: String): Future[Option[T]] = {
+    session.selectOne(queryString).map(_.map(convert))
+  }
+
+  protected def `type`(r: Row):Option[String] = Option(r.getString(Columns.Type))
+
+  protected def title(r: Row):String = r.getString(Columns.Title)
+
+  protected def keyWord(r: Row):String =  r.getString(Columns.KeyWord)
+
+  protected def keyWords(r: Row):Seq[String] = r.getSet(Columns.KeyWords, classOf[String]).asScala.toSeq
+
+  protected def creationDate(r: Row):Option[LocalDateTime]= Option(r.getTimestamp(Columns.CreationDate).toLocalDateTime)
+
+}
+
+class KeyWordTitleDao(session: CassandraSession)(implicit ec: ExecutionContext) extends AbstractKeyWordTitleDao[KeyWordTitle](session){
+  override protected def convert(r: Row): KeyWordTitle = {
+    KeyWordTitle(id(r),title(r), keyWord(r))
+  }
+
+  def getKeyWordTitle(keyWords: Seq[String]): Future[Seq[KeyWordTitle]] = {
+    sessionSelectAll(KeyWordTitleTable.queryByInKeyWords(keyWords))
+  }
 }

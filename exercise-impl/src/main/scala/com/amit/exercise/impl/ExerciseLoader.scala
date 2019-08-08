@@ -1,7 +1,7 @@
 package com.amit.exercise.impl
 
 import com.amit.exercise.api.ExerciseService
-import com.amit.exercise.impl.store.daos.{BankInfoDao, BlackListIpDao, CategoryDao}
+import com.amit.exercise.impl.store.daos.{BankInfoDao, BlackListIpDao, CategoryDao, KeyWordTitleDao}
 import com.lightbend.lagom.scaladsl.api.ServiceLocator
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
@@ -38,5 +38,6 @@ abstract class ExerciseApplication(context: LagomApplicationContext)
   lazy val bankNameInfoDao: BankInfoDao = wire[BankInfoDao]
   lazy val blackListIpDao: BlackListIpDao = wire[BlackListIpDao]
   lazy val fileCategoryDao: CategoryDao = wire[CategoryDao]
+  lazy val keyWordTitleDao:KeyWordTitleDao = wire[KeyWordTitleDao]
 
 }
