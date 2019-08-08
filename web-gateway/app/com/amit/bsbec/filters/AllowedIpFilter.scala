@@ -2,36 +2,37 @@ package com.amit.bsbec.filters
 
 import java.net.InetAddress
 
+import akka.stream.Materializer
 import com.amit.exercise.api.ExerciseService
 import javax.inject._
 import play.api.Logger
-import play.api.http.HttpErrorHandler
+import play.api.http.{DefaultHttpFilters, HttpErrorHandler, Status}
 import play.api.mvc._
 import play.api.libs.streams.Accumulator
 import play.api.MarkerContexts.SecurityMarkerContext
-import play.api.http.Status
 import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AllowedIpFilter (exerciseService: ExerciseService,errorHandler: HttpErrorHandler)(implicit ec: ExecutionContext) extends EssentialFilter {
+class AllowedIpFilter (exerciseService: ExerciseService,errorHandler: HttpErrorHandler)(implicit  ec: ExecutionContext,val mat: Materializer) extends Filter {
 
-    val logger = Logger(this.getClass)
-    override def apply(next: EssentialAction) = EssentialAction { request =>
-      if (true) {
-        logger.debug(s"Ip ${remoteIpAddress(request)}")(SecurityMarkerContext)
-        next(request)
-      } else {
-        logger.warn(s"Ip not allowed: ${request.host}")(SecurityMarkerContext)
-        Accumulator.done(errorHandler.onClientError(request, Status.BAD_REQUEST, s"Ip not allowed: ${request.host}"))
-      }
+  val logger = Logger(this.getClass)
+
+  def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
+    val remoteIp = remoteIpAddress(requestHeader)
+
+    isBlackListIp(remoteIp).flatMap{
+      case true => errorHandler.onClientError(requestHeader, Status.BAD_REQUEST, s"Ip not allowed: ${remoteIp}")
+      case false =>
+        logger.debug(s"isBlackListIp ${remoteIp} false")
+        nextFilter(requestHeader)
     }
+  }
 
-    private def isBlackListIp(request: RequestHeader):Future[Boolean] = {
-      val dotIp = remoteIpAddress(request)
+    private def isBlackListIp(dotIp: String):Future[Boolean] = {
       val longIp = IPv4ToLong(dotIp)
       exerciseService.isBlackListIp(longIp).invoke.map{ x => x }.recover{
-        case ex:Exception => 
+        case ex:Exception =>
           logger.debug(s"AllowedIpFilter isBlackListIp exception ${ex.getMessage}")
           false
       }
