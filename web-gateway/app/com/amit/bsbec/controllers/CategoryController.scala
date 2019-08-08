@@ -73,23 +73,22 @@ class CategoryController (
         file
     }
     fileOption match {
-      case Some(f) =>
-        val fileResult = parseOnTempFile(f)
+      case Some(f) => parseOnTempFile(f).flatMap{str =>
         val data = operateOnTempFile(f)
-        toCategoryTag(fileResult).map(x=>
-          Ok(Json.toJson[Map[String,Int]](x)
-        ))
+        fileResult(str)
+        Future.successful(Ok(Json.toJson(fileResult(str).map(m => m._1._1 -> m._1._2))))
+      }
       case None => Future.successful(Ok(s"No file to process"))
     }
   }
 
-  private def toCategoryTag(wordsFrequency:Seq[((String, Int), Int)]):Future[Map[String,Int]] = {
-    keyWordDictionary.map{kwSeq =>
-      wordsFrequency.map{keyFreqRank =>
-        val category = kwSeq.get(keyFreqRank._1._1).getOrElse("other")
-        category -> keyFreqRank._1._2
-      }.toMap
-    }
+  private def fileResult(lines:Seq[String]):Seq[((String, Int), Int)] = {
+    lines.filter(_.nonEmpty)
+      .flatMap(_.split("""\W+"""))
+      .groupBy(_.toLowerCase())
+      .mapValues(_.size).toSeq
+      .sortWith { case ((_, v0), (_, v1)) => v0 > v1 }
+      .zipWithIndex
   }
 
   lazy val keyWordDictionary:Future[Map[String,String]] = {
@@ -125,14 +124,11 @@ class CategoryController (
   /**
     * A generic operation on the temporary file that deletes the temp file after completion.
     */
-  private def parseOnTempFile(file: File):Seq[((String, Int), Int)] = {
-    Source.fromFile(file).getLines()
-      .filter(_.nonEmpty)
-      .flatMap(_.split("""\W+""")).toSeq
-      .groupBy(_.toLowerCase())
-      .mapValues(_.size).toSeq
-      .sortWith { case ((_, v0), (_, v1)) => v0 > v1 }
-      .zipWithIndex
+  private def parseOnTempFile(file: File):Future[Seq[String]] = {
+    FileIO.fromPath(file.toPath)
+      .via(Framing.delimiter(ByteString(System.lineSeparator), maximumFrameLength = 512, allowTruncation = true))
+      .map(_.utf8String)
+      .runWith(Sink.seq[String])
   }
   /**
     * A generic operation on the temporary file that deletes the temp file after completion.
