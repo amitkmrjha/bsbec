@@ -11,6 +11,8 @@ import com.lightbend.lagom.scaladsl.client.{ConfigurationServiceLocatorComponent
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.softwaremill.macwire._
 import play.api.ApplicationLoader.Context
+import play.api.cache.AsyncCacheApi
+import play.api.cache.caffeine.CaffeineCacheComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, LoggerConfigurator, Mode}
 import play.filters.HttpFiltersComponents
@@ -35,7 +37,8 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   with AhcWSComponents
   with LagomConfigComponent
   with LagomServiceClientComponents
-  with controllers.AssetsComponents{
+  with controllers.AssetsComponents
+  with CaffeineCacheComponents{
 
   override lazy val serviceInfo: ServiceInfo = ServiceInfo(
     "web-gateway",
@@ -65,6 +68,8 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   lazy val userAwareBodyParser: play.api.mvc.BodyParsers.Default = wire[play.api.mvc.BodyParsers.Default]
 
   lazy val javaclock : Clock = Clock.systemDefaultZone
+
+  lazy val cacheApi : AsyncCacheApi = defaultCacheApi
 
   lazy  val allowedIpFilter: AllowedIpFilter = wire[AllowedIpFilter]
 }

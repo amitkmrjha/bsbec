@@ -10,59 +10,63 @@ import play.api.http.{DefaultHttpFilters, HttpErrorHandler, Status}
 import play.api.mvc._
 import play.api.libs.streams.Accumulator
 import play.api.MarkerContexts.SecurityMarkerContext
+import play.api.cache.AsyncCacheApi
 import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AllowedIpFilter (exerciseService: ExerciseService,errorHandler: HttpErrorHandler)(implicit  ec: ExecutionContext,val mat: Materializer) extends Filter {
+class AllowedIpFilter (cache: AsyncCacheApi,exerciseService: ExerciseService,errorHandler: HttpErrorHandler)(implicit  ec: ExecutionContext,val mat: Materializer) extends Filter {
 
   val logger = Logger(this.getClass)
 
   def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     val remoteIp = remoteIpAddress(requestHeader)
 
-    isBlackListIp(remoteIp).flatMap{
+    isValidIP(remoteIp).flatMap{
       case true => errorHandler.onClientError(requestHeader, Status.BAD_REQUEST, s"Ip not allowed: ${remoteIp}")
-      case false =>
-        logger.debug(s"isBlackListIp ${remoteIp} false")
-        nextFilter(requestHeader)
+      case false =>   nextFilter(requestHeader)
     }
   }
 
-    private def isBlackListIp(dotIp: String):Future[Boolean] = {
-      val longIp = IPv4ToLong(dotIp)
-      exerciseService.isBlackListIp(longIp).invoke.map{ x => x }.recover{
-        case ex:Exception =>
-          logger.debug(s"AllowedIpFilter isBlackListIp exception ${ex.getMessage}")
-          false
-      }
-    }
+  private def isValidIP(dotIp: String): Future[Boolean] = cache.getOrElseUpdate[Boolean](dotIp) {
+    isBlackListIp(dotIp)
+  }
 
-    private def remoteIpAddress(request: RequestHeader):String = {
-      //request.headers.get("x-forwarded-for").getOrElse(request.remoteAddress.toString)
-      // see http://johannburkard.de/blog/programming/java/x-forwarded-for-http-header.html
-      request.headers.get("X-Forwarded-For").map(_.split(",").head).getOrElse(
-        request.headers.get("Remote_Addr").getOrElse(request.remoteAddress))
-    }
+  private def remoteIpAddress(request: RequestHeader):String = {
+    //request.headers.get("x-forwarded-for").getOrElse(request.remoteAddress.toString)
+    // see http://johannburkard.de/blog/programming/java/x-forwarded-for-http-header.html
+    request.headers.get("X-Forwarded-For").map(_.split(",").head).getOrElse(
+      request.headers.get("Remote_Addr").getOrElse(request.remoteAddress))
+  }
 
-    private def IPv4ToLong(dottedIP: String): Long = {
-      val addrArray: Array[String] = dottedIP.split("\\.")
-      var num: Long = 0
-      var i: Int = 0
-      while (i < addrArray.length) {
-        val power: Int = 3 - i
-        num = num + ((addrArray(i).toInt % 256) * Math.pow(256, power)).toLong
-        i += 1
-      }
-      num
+  private def isBlackListIp(dotIp: String):Future[Boolean] = {
+    logger.debug(s"validating ip [${dotIp}] with exercise service black list ip store. ")
+    val longIp = IPv4ToLong(dotIp)
+    exerciseService.isBlackListIp(longIp).invoke.recover{
+      case ex:Exception =>
+        logger.debug(s"AllowedIpFilter isBlackListIp exception ${ex.getMessage}")
+        false
     }
+  }
 
-    private def LongToIPv4 (ip : Long) : String = {
-      val bytes: Array[Byte] = new Array[Byte](4)
-      bytes(0) = ((ip & 0xff000000) >> 24).toByte
-      bytes(1) = ((ip & 0x00ff0000) >> 16).toByte
-      bytes(2) = ((ip & 0x0000ff00) >> 8).toByte
-      bytes(3) = (ip & 0x000000ff).toByte
-      InetAddress.getByAddress(bytes).getHostAddress()
+  private def IPv4ToLong(dottedIP: String): Long = {
+    val addrArray: Array[String] = dottedIP.split("\\.")
+    var num: Long = 0
+    var i: Int = 0
+    while (i < addrArray.length) {
+      val power: Int = 3 - i
+      num = num + ((addrArray(i).toInt % 256) * Math.pow(256, power)).toLong
+      i += 1
     }
+    num
+  }
+
+  private def LongToIPv4 (ip : Long) : String = {
+    val bytes: Array[Byte] = new Array[Byte](4)
+    bytes(0) = ((ip & 0xff000000) >> 24).toByte
+    bytes(1) = ((ip & 0x00ff0000) >> 16).toByte
+    bytes(2) = ((ip & 0x0000ff00) >> 8).toByte
+    bytes(3) = (ip & 0x000000ff).toByte
+    InetAddress.getByAddress(bytes).getHostAddress()
+  }
 }

@@ -49,7 +49,7 @@ lazy val `web-gateway` = (project in file("web-gateway"))
       lagomScaladslServer,
       macwire,
       scalaTest,
-      ehcache
+      caffeine
     )
   )
 
