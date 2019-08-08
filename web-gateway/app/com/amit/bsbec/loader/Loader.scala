@@ -3,6 +3,7 @@ package com.intercax.syndeia.loader
 import java.time.Clock
 
 import com.amit.bsbec.controllers.{BankInfoController, CategoryController, ContractController, HomeController}
+import com.amit.bsbec.filters.{AllowedIpFilter, CustomHttpFilterComponents, ExampleFilter}
 import com.amit.exercise.api.ExerciseService
 import com.intercax.syndeia.filters.LoggingFilter
 import com.lightbend.lagom.scaladsl.api.{LagomConfigComponent, ServiceAcl, ServiceInfo}
@@ -24,7 +25,8 @@ import scala.concurrent.ExecutionContext
 import router.Routes
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
-  with HttpFiltersComponents
+  /*with HttpFiltersComponents*/
+  with CustomHttpFilterComponents
   with GzipFilterComponents
   with  CSRFComponents
   with CORSComponents
@@ -43,9 +45,6 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   )
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
 
-  lazy val loggingFilter: LoggingFilter = wire[LoggingFilter] //nee to fix this
-  
-   override lazy val httpFilters = Seq(gzipFilter,/*csrfFilter,*/ corsFilter,securityHeadersFilter,allowedHostsFilter)
 
    lazy val router  = {
     val prefix = "/"
@@ -67,6 +66,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
 
   lazy val javaclock : Clock = Clock.systemDefaultZone
 
+  lazy  val allowedIpFilter: AllowedIpFilter = wire[AllowedIpFilter]
 }
 
 class WebGatewayLoader extends ApplicationLoader {
