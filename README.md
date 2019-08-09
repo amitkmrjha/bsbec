@@ -38,4 +38,4 @@ http://localhost:9000/contract/electricity
 http://localhost:9000/bank/info/abc
 
 
-#insert into bsbecexercise.black_list_ip  (id, ip) VALUES (08018fd0-b9b5-11e9-94fa-5fa8cceca403, 2130706433);
+<!-- insert into bsbecexercise.black_list_ip  (id, ip) VALUES (08018fd0-b9b5-11e9-94fa-5fa8cceca403, 2130706433); -->
