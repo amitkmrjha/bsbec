@@ -25,28 +25,17 @@ sbt compile
 sbt runAll
 ```
 
-## Test the Rest API
+## Test contractProcess
 
-upload a log file to  http://localhost:9000/upload/log
+http://localhost:9000/contract/electricity
 
-## Test through browser
+## Upload csv
 
- go to <http://localhost:9000/log> choose the log file to upload
+ POST http://localhost:9000/bank/info
 
+## Test bank info by identifier
 
-## Controllers
-
-- `LogController.scala`:
-
-  Shows how to handle file upload requests.
-
-
-## Swagger pec 3.0
-
-/public/swagger/openapi.json
-
-
-
+http://localhost:9000/bank/info/abc
 
 
 #insert into bsbecexercise.black_list_ip  (id, ip) VALUES (08018fd0-b9b5-11e9-94fa-5fa8cceca403, 2130706433);
